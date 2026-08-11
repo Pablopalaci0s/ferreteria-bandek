@@ -74,6 +74,24 @@ Route::middleware('auth')->group(function () {
         ]);
 
 
+        Route::get('productos/importar', [
+            \App\Http\Controllers\Admin\ImportarProductosController::class,
+            'formulario'
+        ])->name('productos.importar');
+
+
+        Route::post('productos/importar', [
+            \App\Http\Controllers\Admin\ImportarProductosController::class,
+            'procesar'
+        ])->name('productos.importar.procesar');
+
+
+        Route::get('productos/plantilla', [
+            \App\Http\Controllers\Admin\ImportarProductosController::class,
+            'plantilla'
+        ])->name('productos.plantilla');
+
+
         Route::resource(
             'productos',
             \App\Http\Controllers\Admin\ProductoController::class

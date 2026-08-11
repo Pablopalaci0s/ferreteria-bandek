@@ -18,12 +18,23 @@
         {{ $productos->total() }} productos registrados
     </p>
 
-    <a
-        href="{{ route('admin.productos.create') }}"
-        class="bg-red-800 hover:bg-red-900 text-white text-sm font-medium px-4 py-2 rounded-md"
-    >
-        + Nuevo producto
-    </a>
+    <div class="flex gap-2">
+
+        <a
+            href="{{ route('admin.productos.importar') }}"
+            class="bg-white border border-gray-300 hover:border-red-800 text-gray-700 text-sm font-medium px-4 py-2 rounded-md"
+        >
+            Importar CSV
+        </a>
+
+        <a
+            href="{{ route('admin.productos.create') }}"
+            class="bg-red-800 hover:bg-red-900 text-white text-sm font-medium px-4 py-2 rounded-md"
+        >
+            + Nuevo producto
+        </a>
+
+    </div>
 
 </div>
 
