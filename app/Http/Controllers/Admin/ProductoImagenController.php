@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ImagenProducto;
 use App\Models\Producto;
+use App\Support\ImagenOptimizada;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,7 +21,7 @@ class ProductoImagenController extends Controller
         $orden = ($producto->imagenes()->max('orden') ?? -1) + 1;
 
         foreach ($request->file('imagenes') as $archivo) {
-            $ruta = $archivo->store('productos', 'public');
+            $ruta = ImagenOptimizada::guardar($archivo, 'productos', 1400, 82);
 
             $producto->imagenes()->create([
                 'ruta' => $ruta,

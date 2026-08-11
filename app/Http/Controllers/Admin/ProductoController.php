@@ -8,6 +8,7 @@ use App\Models\Marca;
 use App\Models\Producto;
 use App\Models\Proveedor;
 use App\Models\UnidadMedida;
+use App\Support\ImagenOptimizada;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -46,7 +47,7 @@ class ProductoController extends Controller
 
         if ($request->hasFile('imagen_principal')) {
             $validado['imagen_principal'] =
-                $request->file('imagen_principal')->store('productos', 'public');
+                ImagenOptimizada::guardar($request->file('imagen_principal'), 'productos', 1400, 82);
         }
 
         Producto::create($validado);
@@ -79,7 +80,7 @@ class ProductoController extends Controller
             }
 
             $validado['imagen_principal'] =
-                $request->file('imagen_principal')->store('productos', 'public');
+                ImagenOptimizada::guardar($request->file('imagen_principal'), 'productos', 1400, 82);
         }
 
         $producto->update($validado);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
+use App\Support\ImagenOptimizada;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,7 +31,7 @@ class BannerController extends Controller
     {
         $validado = $this->validarDatos($request);
 
-        $validado['imagen'] = $request->file('imagen')->store('banners', 'public');
+        $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'banners', 1920, 82);
 
         Banner::create($validado);
 
@@ -54,7 +55,7 @@ class BannerController extends Controller
                 Storage::disk('public')->delete($banner->imagen);
             }
 
-            $validado['imagen'] = $request->file('imagen')->store('banners', 'public');
+            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'banners', 1920, 82);
         }
 
         $banner->update($validado);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Categoria;
+use App\Support\ImagenOptimizada;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -42,7 +43,7 @@ class CategoriaController extends Controller
         $validado['slug'] = Str::slug($validado['nombre']);
 
         if ($request->hasFile('imagen')) {
-            $validado['imagen'] = $request->file('imagen')->store('categorias', 'public');
+            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'categorias', 800, 82);
         }
 
         Categoria::create($validado);
@@ -81,7 +82,7 @@ class CategoriaController extends Controller
                 Storage::disk('public')->delete($categoria->imagen);
             }
 
-            $validado['imagen'] = $request->file('imagen')->store('categorias', 'public');
+            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'categorias', 800, 82);
         }
 
         $categoria->update($validado);
