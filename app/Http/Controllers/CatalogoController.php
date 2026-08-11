@@ -70,8 +70,12 @@ class CatalogoController extends Controller
             });
         }
 
-        $productos = $query
-            ->latest()
+        // Solo disponibles
+        if ($request->boolean('disponible')) {
+            $query->where('stock', '>', 0);
+        }
+
+        $productos = $this->aplicarOrden($query, $request->string('orden')->toString())
             ->paginate(12)
             ->withQueryString();
 
@@ -133,8 +137,12 @@ class CatalogoController extends Controller
             });
         }
 
-        $productos = $query
-            ->latest()
+        // Solo disponibles
+        if ($request->boolean('disponible')) {
+            $query->where('stock', '>', 0);
+        }
+
+        $productos = $this->aplicarOrden($query, $request->input('orden'))
             ->take(12)
             ->get();
 
@@ -179,6 +187,19 @@ class CatalogoController extends Controller
         abort_unless($producto->activo, 404);
 
         return view('catalogo.show', compact('producto'));
+    }
+
+    /**
+     * Aplica el orden pedido a la consulta. Por defecto, los más recientes primero.
+     */
+    private function aplicarOrden($query, ?string $orden)
+    {
+        return match ($orden) {
+            'precio_asc' => $query->orderBy('precio', 'asc'),
+            'precio_desc' => $query->orderBy('precio', 'desc'),
+            'nombre_asc' => $query->orderBy('nombre', 'asc'),
+            default => $query->latest(),
+        };
     }
 }
 

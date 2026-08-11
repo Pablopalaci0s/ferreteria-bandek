@@ -1,4 +1,7 @@
-<x-layouts.tienda :title="'Ferretería BANDEK — Inicio'">
+<x-layouts.tienda
+    :title="'Ferretería BANDEK — Inicio'"
+    :description="'Herramientas, materiales de construcción y soluciones eléctricas. Asesoría técnica y atención por WhatsApp.'"
+>
 
     @if ($banners->isNotEmpty())
 

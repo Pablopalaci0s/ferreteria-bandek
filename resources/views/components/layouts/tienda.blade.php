@@ -3,9 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Ferretería BANDEK' }}</title>
+    @php
+        $ogTitulo = $title ?? 'Ferretería BANDEK';
+        $ogDescripcion = $description ?? 'Materiales de construcción, herramientas y soluciones eléctricas. Asesoría técnica y atención por WhatsApp en Ferretería BANDEK.';
+        $ogImagen = $image ?? asset('img/logo-completo.png');
+        $ogTipo = $type ?? 'website';
+    @endphp
+
+    <title>{{ $ogTitulo }}</title>
+    <meta name="description" content="{{ $ogDescripcion }}">
     <link rel="icon" type="image/png" href="{{ asset('img/favicon-32.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('img/apple-touch-icon.png') }}">
+
+    {{-- Open Graph / WhatsApp, Facebook --}}
+    <meta property="og:type" content="{{ $ogTipo }}">
+    <meta property="og:site_name" content="Ferretería BANDEK">
+    <meta property="og:title" content="{{ $ogTitulo }}">
+    <meta property="og:description" content="{{ $ogDescripcion }}">
+    <meta property="og:image" content="{{ $ogImagen }}">
+    <meta property="og:image:secure_url" content="{{ $ogImagen }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:locale" content="es_SV">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $ogTitulo }}">
+    <meta name="twitter:description" content="{{ $ogDescripcion }}">
+    <meta name="twitter:image" content="{{ $ogImagen }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">

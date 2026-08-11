@@ -1,4 +1,7 @@
-<x-layouts.tienda :title="'Catálogo — Ferretería BANDEK'">
+<x-layouts.tienda
+    :title="'Catálogo — Ferretería BANDEK'"
+    :description="'Explorá todo el catálogo de Ferretería BANDEK: herramientas, materiales eléctricos y más.'"
+>
 
 <div
     class="max-w-7xl mx-auto px-4 py-10"
@@ -11,7 +14,7 @@
     </h1>
 
     {{-- FILTROS --}}
-    <div class="flex flex-col md:flex-row gap-3 mb-8">
+    <div class="flex flex-col md:flex-row mb-8" style="gap: 0.75rem; flex-wrap: wrap;">
 
         {{-- BUSCADOR --}}
         <div class="relative flex-1">
@@ -103,11 +106,36 @@
         </select>
 
 
+        {{-- ORDEN --}}
+        <select
+            x-model="orden"
+            @change="buscarProductos()"
+            class="border rounded-md px-4 py-2 text-sm"
+        >
+            <option value="">Más recientes</option>
+            <option value="precio_asc">Precio: menor a mayor</option>
+            <option value="precio_desc">Precio: mayor a menor</option>
+            <option value="nombre_asc">Nombre: A-Z</option>
+        </select>
+
+
+        {{-- DISPONIBILIDAD --}}
+        <label class="flex items-center gap-2 text-sm text-gray-600 border rounded-md px-4 py-2 whitespace-nowrap cursor-pointer">
+            <input
+                type="checkbox"
+                x-model="disponible"
+                @change="buscarProductos()"
+                class="rounded border-gray-300 text-red-800 focus:ring-red-700"
+            >
+            Solo en stock
+        </label>
+
+
         {{-- LIMPIAR --}}
         <button
             type="button"
             @click="limpiarFiltros()"
-            x-show="buscar || categoria || marca"
+            x-show="buscar || categoria || marca || orden || disponible"
             x-cloak
             class="text-sm text-gray-500
                    hover:text-red-800 px-2"
@@ -285,6 +313,8 @@ function buscadorCatalogo()
         buscar: '',
         categoria: '',
         marca: '',
+        orden: '',
+        disponible: false,
 
         productos: [],
 
@@ -307,10 +337,18 @@ function buscadorCatalogo()
             this.marca =
                 params.get('marca') || '';
 
+            this.orden =
+                params.get('orden') || '';
+
+            this.disponible =
+                params.get('disponible') === '1';
+
             if (
                 this.buscar ||
                 this.categoria ||
-                this.marca
+                this.marca ||
+                this.orden ||
+                this.disponible
             ) {
                 this.buscarProductos();
             }
@@ -345,6 +383,22 @@ function buscadorCatalogo()
                     params.append(
                         'marca',
                         this.marca
+                    );
+                }
+
+                if (this.orden) {
+
+                    params.append(
+                        'orden',
+                        this.orden
+                    );
+                }
+
+                if (this.disponible) {
+
+                    params.append(
+                        'disponible',
+                        '1'
                     );
                 }
 
@@ -418,6 +472,28 @@ function buscadorCatalogo()
                     );
                 }
 
+                if (this.orden) {
+                    url.searchParams.set(
+                        'orden',
+                        this.orden
+                    );
+                } else {
+                    url.searchParams.delete(
+                        'orden'
+                    );
+                }
+
+                if (this.disponible) {
+                    url.searchParams.set(
+                        'disponible',
+                        '1'
+                    );
+                } else {
+                    url.searchParams.delete(
+                        'disponible'
+                    );
+                }
+
                 window.history.replaceState(
                     {},
                     '',
@@ -442,6 +518,8 @@ function buscadorCatalogo()
             this.buscar = '';
             this.categoria = '';
             this.marca = '';
+            this.orden = '';
+            this.disponible = false;
 
             this.productos = [];
             this.buscando = false;

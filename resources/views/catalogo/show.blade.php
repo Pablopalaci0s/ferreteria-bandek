@@ -1,10 +1,19 @@
 @php
 $imagenPrincipal = $producto->imagen_principal
 ? asset('storage/' . $producto->imagen_principal)
-: 'https://placehold.co/500x500?text=BANDEK';
+: asset('img/logo-completo.png');
+
+$ogDescripcion = $producto->descripcion
+? \Illuminate\Support\Str::limit(strip_tags($producto->descripcion), 160)
+: 'Consultá precio y disponibilidad de ' . $producto->nombre . ' en Ferretería BANDEK.';
 @endphp
 
-<x-layouts.tienda :title="$producto->nombre . ' — Ferretería BANDEK'">
+<x-layouts.tienda
+    :title="$producto->nombre . ' — Ferretería BANDEK'"
+    :description="$ogDescripcion"
+    :image="$imagenPrincipal"
+    :type="'product'"
+>
 
 
 <div class="max-w-5xl mx-auto px-4 py-10">

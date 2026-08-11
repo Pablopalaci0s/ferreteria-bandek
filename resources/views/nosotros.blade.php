@@ -1,4 +1,7 @@
-<x-layouts.tienda :title="'Ferretería BANDEK — Nosotros'">
+<x-layouts.tienda
+    :title="'Ferretería BANDEK — Nosotros'"
+    :description="'Conocé la historia, misión y valores de Ferretería BANDEK. Más de 15 años ayudando a construir en El Salvador.'"
+>
 
     {{-- =========================================================
     HERO
