@@ -145,9 +145,12 @@ $ogDescripcion = $producto->descripcion
                     href="{{ $producto->whatsapp_link }}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="bg-red-700 hover:bg-red-800 text-white font-semibold text-center py-3 px-6 rounded-lg inline-block"
+                    class="bg-green-500 hover:bg-green-600 text-white font-semibold text-center py-3 px-6 rounded-lg inline-flex items-center gap-2"
                 >
-                    Comprar ahora
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z" />
+                    </svg>
+                    Comprar por WhatsApp
                 </a>
 
             @else

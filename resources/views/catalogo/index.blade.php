@@ -249,8 +249,7 @@
                         </p>
 
                         <a
-                            :href="producto.whatsapp"
-                            target="_blank"
+                            :href="producto.url"
                             class="mt-auto bg-red-700
                                    hover:bg-red-800
                                    text-white text-sm font-semibold

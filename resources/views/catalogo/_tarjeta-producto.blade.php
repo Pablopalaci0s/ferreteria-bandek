@@ -34,8 +34,7 @@
         @endif
 
         <a
-            href="{{ $producto->whatsapp_link }}"
-            target="_blank"
+            href="{{ route('catalogo.show', $producto) }}"
             class="mt-auto bg-red-700 hover:bg-red-800 text-white text-sm font-semibold text-center py-2 rounded-md"
         >
             Comprar ahora
