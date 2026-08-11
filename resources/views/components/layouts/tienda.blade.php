@@ -8,6 +8,11 @@
         $ogDescripcion = $description ?? 'Materiales de construcción, herramientas y soluciones eléctricas. Asesoría técnica y atención por WhatsApp en Ferretería BANDEK.';
         $ogImagen = $image ?? asset('img/logo-completo.png');
         $ogTipo = $type ?? 'website';
+
+        $configSitio = \App\Models\Configuracion::pluck('valor', 'clave');
+        $whatsappNumero = $configSitio['whatsapp_numero'] ?? '';
+        $telefonoSitio = $configSitio['telefono'] ?? '';
+        $direccionSitio = $configSitio['direccion'] ?? 'San Salvador, El Salvador';
     @endphp
 
     <title>{{ $ogTitulo }}</title>
@@ -732,7 +737,7 @@ FOOTER
                     </svg>
 
                     <span class="text-gray-400">
-                        San Salvador, El Salvador
+                        {{ $direccionSitio }}
                     </span>
 
                 </li>
@@ -769,12 +774,18 @@ FOOTER
 
                     </svg>
 
-                    <a
-                        href="tel:+50300000000"
-                        class="text-gray-400 hover:text-white transition"
-                    >
-                        +503 0000-0000
-                    </a>
+                    @if ($telefonoSitio)
+                        <a
+                            href="tel:{{ preg_replace('/[^0-9+]/', '', $telefonoSitio) }}"
+                            class="text-gray-400 hover:text-white transition"
+                        >
+                            {{ $telefonoSitio }}
+                        </a>
+                    @else
+                        <span class="text-gray-500">
+                            Próximamente
+                        </span>
+                    @endif
 
                 </li>
 
@@ -797,7 +808,7 @@ FOOTER
                     </svg>
 
                     <a
-                        href="https://wa.me/{{ \App\Models\Configuracion::where('clave', 'whatsapp_numero')->value('valor') }}"
+                        href="https://wa.me/{{ $whatsappNumero }}"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="text-gray-400 hover:text-white transition"
@@ -864,7 +875,7 @@ FOOTER
 
 
             <a
-                href="https://wa.me/{{ \App\Models\Configuracion::where('clave', 'whatsapp_numero')->value('valor') }}"
+                href="https://wa.me/{{ $whatsappNumero }}"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="inline-flex items-center justify-center
@@ -916,7 +927,7 @@ BOTÓN FLOTANTE WHATSAPP
 ========================================================= --}}
 
 <a
-href="https://wa.me/{{ \App\Models\Configuracion::where('clave', 'whatsapp_numero')->value('valor') }}"
+href="https://wa.me/{{ $whatsappNumero }}"
 target="_blank"
 rel="noopener noreferrer"
 class="fixed bottom-5 right-5 z-40

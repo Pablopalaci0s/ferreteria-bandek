@@ -138,6 +138,19 @@
         </a>
 
         @if (auth()->user()->rol === 'admin')
+
+    <a href="{{ route('admin.solicitudes-precio.index') }}" class="flex items-center justify-between gap-3 px-5 py-2.5 text-sm {{ request()->routeIs('admin.solicitudes-precio.*') ? 'bg-red-800 text-white' : 'hover:bg-gray-800' }}">
+        <span>Solicitudes de precio</span>
+        @php $pendientesPrecio = \App\Models\SolicitudPrecio::pendientes()->count(); @endphp
+        @if ($pendientesPrecio > 0)
+            <span class="bg-yellow-500 text-gray-900 text-xs font-bold px-1.5 py-0.5 rounded-full">{{ $pendientesPrecio }}</span>
+        @endif
+    </a>
+
+    <a href="{{ route('admin.configuracion.edit') }}" class="flex items-center gap-3 px-5 py-2.5 text-sm {{ request()->routeIs('admin.configuracion.*') ? 'bg-red-800 text-white' : 'hover:bg-gray-800' }}">
+        Configuración
+    </a>
+
     <a href="{{ route('admin.usuarios.index') }}" class="flex items-center gap-3 px-5 py-2.5 text-sm {{ request()->routeIs('admin.usuarios.*') ? 'bg-red-800 text-white' : 'hover:bg-gray-800' }}">
         Usuarios
     </a>

@@ -136,6 +136,36 @@ Route::middleware('auth')->group(function () {
 
         Route::middleware('admin')->group(function () {
 
+            Route::get('configuracion', [
+                \App\Http\Controllers\Admin\ConfiguracionController::class,
+                'edit'
+            ])->name('configuracion.edit');
+
+
+            Route::put('configuracion', [
+                \App\Http\Controllers\Admin\ConfiguracionController::class,
+                'update'
+            ])->name('configuracion.update');
+
+
+            Route::get('solicitudes-precio', [
+                \App\Http\Controllers\Admin\SolicitudPrecioController::class,
+                'index'
+            ])->name('solicitudes-precio.index');
+
+
+            Route::put('solicitudes-precio/{solicitud}/aprobar', [
+                \App\Http\Controllers\Admin\SolicitudPrecioController::class,
+                'aprobar'
+            ])->name('solicitudes-precio.aprobar');
+
+
+            Route::put('solicitudes-precio/{solicitud}/rechazar', [
+                \App\Http\Controllers\Admin\SolicitudPrecioController::class,
+                'rechazar'
+            ])->name('solicitudes-precio.rechazar');
+
+
             Route::get('usuarios', [
                 \App\Http\Controllers\Admin\UsuarioController::class,
                 'index'

@@ -66,6 +66,16 @@ class Producto extends Model
         return $this->hasMany(ImagenProducto::class)->orderBy('orden');
     }
 
+    public function solicitudesPrecio()
+    {
+        return $this->hasMany(SolicitudPrecio::class);
+    }
+
+    public function solicitudPrecioPendiente()
+    {
+        return $this->solicitudesPrecio()->pendientes()->latest()->first();
+    }
+
     public function getWhatsappLinkAttribute()
     {
         $numero = Configuracion::where('clave', 'whatsapp_numero')->value('valor');

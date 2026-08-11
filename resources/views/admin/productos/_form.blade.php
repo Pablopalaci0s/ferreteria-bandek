@@ -110,6 +110,12 @@ $p = $producto ?? null;
         required
     >
 
+    @if ($p && auth()->user()->rol === 'vendedor')
+        <p class="text-xs text-yellow-700 mt-1">
+            Los cambios de precio requieren aprobación de un administrador.
+        </p>
+    @endif
+
     @error('precio')
         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
     @enderror

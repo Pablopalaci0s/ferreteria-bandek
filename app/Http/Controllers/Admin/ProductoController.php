@@ -7,6 +7,7 @@ use App\Models\Categoria;
 use App\Models\Marca;
 use App\Models\Producto;
 use App\Models\Proveedor;
+use App\Models\SolicitudPrecio;
 use App\Models\UnidadMedida;
 use App\Support\ImagenOptimizada;
 use Illuminate\Http\Request;
@@ -83,11 +84,67 @@ class ProductoController extends Controller
                 ImagenOptimizada::guardar($request->file('imagen_principal'), 'productos', 1400, 82);
         }
 
+        $usuario = $request->user();
+
+        if ($usuario->rol === 'vendedor' && $this->cambioDePrecio($producto, $validado)) {
+
+            $this->registrarSolicitudPrecio($producto, $validado, $usuario);
+
+            // El precio no se toca todavía: queda a la espera de aprobación.
+            unset($validado['precio'], $validado['precio_oferta']);
+
+            $producto->update($validado);
+
+            return redirect()
+                ->route('admin.productos.index')
+                ->with('status', 'Se guardaron los cambios del producto. El cambio de precio quedó pendiente de aprobación de un administrador.');
+        }
+
         $producto->update($validado);
 
         return redirect()
             ->route('admin.productos.index')
             ->with('status', 'Producto actualizado.');
+    }
+
+    /**
+     * Determina si el precio o precio de oferta enviados en el formulario
+     * son distintos a los que el producto tiene guardados actualmente.
+     */
+    private function cambioDePrecio(Producto $producto, array $validado): bool
+    {
+        $precioActual = (float) $producto->precio;
+        $precioNuevo = (float) $validado['precio'];
+
+        $precioOfertaActual = is_null($producto->precio_oferta) ? null : (float) $producto->precio_oferta;
+        $precioOfertaNuevo = is_null($validado['precio_oferta'] ?? null) ? null : (float) $validado['precio_oferta'];
+
+        return $precioNuevo !== $precioActual || $precioOfertaNuevo !== $precioOfertaActual;
+    }
+
+    /**
+     * Crea (o actualiza, si ya había una) la solicitud de cambio de precio
+     * pendiente de revisión por un administrador.
+     */
+    private function registrarSolicitudPrecio(Producto $producto, array $validado, $usuario): void
+    {
+        $datos = [
+            'producto_id' => $producto->id,
+            'usuario_id' => $usuario->id,
+            'precio_actual' => (float) $producto->precio,
+            'precio_nuevo' => (float) $validado['precio'],
+            'precio_oferta_actual' => is_null($producto->precio_oferta) ? null : (float) $producto->precio_oferta,
+            'precio_oferta_nuevo' => is_null($validado['precio_oferta'] ?? null) ? null : (float) $validado['precio_oferta'],
+            'estado' => 'pendiente',
+        ];
+
+        $pendiente = $producto->solicitudPrecioPendiente();
+
+        if ($pendiente) {
+            $pendiente->update($datos);
+        } else {
+            SolicitudPrecio::create($datos);
+        }
     }
 
     public function destroy(Producto $producto)

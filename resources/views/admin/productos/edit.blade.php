@@ -9,6 +9,22 @@
         &larr; Volver a productos
     </a>
 
+    @php $solicitudPendiente = $producto->solicitudPrecioPendiente(); @endphp
+
+    @if ($solicitudPendiente)
+        <div class="bg-yellow-50 text-yellow-800 border border-yellow-200 px-4 py-3 rounded-md mb-4 text-sm max-w-2xl">
+            Hay un cambio de precio pendiente de aprobación para este producto:
+            precio actual <strong>${{ number_format($solicitudPendiente->precio_actual, 2) }}</strong>
+            &rarr; propuesto <strong>${{ number_format($solicitudPendiente->precio_nuevo, 2) }}</strong>.
+            @if (auth()->user()->rol === 'admin')
+                Podés revisarlo en
+                <a href="{{ route('admin.solicitudes-precio.index') }}" class="underline font-medium">Solicitudes de precio</a>.
+            @else
+                Todavía no fue revisado por un administrador. Si volvés a cambiar el precio, se actualizará esta misma solicitud.
+            @endif
+        </div>
+    @endif
+
     {{-- Formulario principal del producto --}}
     <form
         action="{{ route('admin.productos.update', $producto) }}"
