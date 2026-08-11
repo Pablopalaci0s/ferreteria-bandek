@@ -251,12 +251,12 @@
                         <a
                             :href="producto.whatsapp"
                             target="_blank"
-                            class="mt-auto bg-green-500
-                                   hover:bg-green-600
-                                   text-white text-sm
+                            class="mt-auto bg-red-700
+                                   hover:bg-red-800
+                                   text-white text-sm font-semibold
                                    text-center py-2 rounded-md"
                         >
-                            Comprar por WhatsApp
+                            Comprar ahora
                         </a>
 
                     </div>

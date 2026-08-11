@@ -145,9 +145,9 @@ $ogDescripcion = $producto->descripcion
                     href="{{ $producto->whatsapp_link }}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="bg-green-500 hover:bg-green-600 text-white font-semibold text-center py-3 px-6 rounded-lg inline-block"
+                    class="bg-red-700 hover:bg-red-800 text-white font-semibold text-center py-3 px-6 rounded-lg inline-block"
                 >
-                    Comprar por WhatsApp
+                    Comprar ahora
                 </a>
 
             @else
