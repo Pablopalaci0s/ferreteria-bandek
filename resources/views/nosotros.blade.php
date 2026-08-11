@@ -1,6 +1,6 @@
 <x-layouts.tienda
     :title="'Ferretería BANDEK — Nosotros'"
-    :description="'Conocé la historia, misión y valores de Ferretería BANDEK. Más de 15 años ayudando a construir en El Salvador.'"
+    :description="'Conocé la historia, misión y valores de Ferretería BANDEK: materiales de construcción, herramientas y asesoría técnica en El Salvador.'"
 >
 
     {{-- =========================================================
@@ -39,7 +39,7 @@
                 </p>
 
                 <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 leading-tight">
-                    Más de una década ayudando a construir
+                    Comprometidos con cada proyecto
                 </h2>
 
                 <p class="text-gray-600 leading-7 mb-4">
@@ -50,10 +50,10 @@
                 </p>
 
                 <p class="text-gray-600 leading-7">
-                    Con los años nos convertimos en un punto de referencia en materiales
-                    eléctricos y ferretería general, siempre con el mismo compromiso:
-                    tener el producto correcto, al precio correcto, con alguien que
-                    sepa explicarte para qué sirve.
+                    Trabajamos para ser un punto de referencia en materiales eléctricos
+                    y ferretería general, siempre con el mismo compromiso: tener el
+                    producto correcto, al precio correcto, con alguien que sepa
+                    explicarte para qué sirve.
                 </p>
             </div>
 
@@ -61,38 +61,6 @@
                 <img src="{{ asset('img/logo-completo.png') }}" alt="Ferretería BANDEK" class="h-full w-auto object-contain">
             </div>
 
-        </div>
-    </section>
-
-    {{-- =========================================================
-    NÚMEROS
-    ========================================================= --}}
-
-    <section class="bg-white border-y">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-
-                <div class="bandek-card bg-gray-50 border rounded-lg p-6 text-center">
-                    <p class="text-3xl font-bold text-red-800 mb-1">+15</p>
-                    <p class="text-sm text-gray-600">Años de experiencia</p>
-                </div>
-
-                <div class="bandek-card bg-gray-50 border rounded-lg p-6 text-center">
-                    <p class="text-3xl font-bold text-red-800 mb-1">+2,000</p>
-                    <p class="text-sm text-gray-600">Productos disponibles</p>
-                </div>
-
-                <div class="bandek-card bg-gray-50 border rounded-lg p-6 text-center">
-                    <p class="text-3xl font-bold text-red-800 mb-1">+500</p>
-                    <p class="text-sm text-gray-600">Clientes atendidos</p>
-                </div>
-
-                <div class="bandek-card bg-gray-50 border rounded-lg p-6 text-center">
-                    <p class="text-3xl font-bold text-red-800 mb-1">100%</p>
-                    <p class="text-sm text-gray-600">Asesoría técnica</p>
-                </div>
-
-            </div>
         </div>
     </section>
 
@@ -167,7 +135,7 @@
                     'Atención rápida por WhatsApp',
                     'Precios justos y transparentes',
                     'Stock actualizado de nuestros productos más buscados',
-                    'Años de experiencia atendiendo al sector construcción',
+                    'Compromiso real con cada proyecto, grande o pequeño',
                 ] as $beneficio)
 
                     <div class="flex items-start gap-3">

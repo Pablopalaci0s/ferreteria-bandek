@@ -52,14 +52,6 @@
         }
 
         /* =========================================================
-           FRANJA DECORATIVA
-        ========================================================= */
-        .bandek-stripe {
-            height: 7px;
-            background: repeating-linear-gradient(135deg, #f59e0b 0 14px, #1c1917 14px 28px);
-        }
-
-        /* =========================================================
            TARJETAS Y BOTONES CON RELIEVE
         ========================================================= */
         .bandek-card {
@@ -142,8 +134,6 @@
     x-init="$watch('oscuro', v => localStorage.setItem('bandek-modo-oscuro', v ? '1' : '0'))"
     :class="{ 'oscuro': oscuro }"
 >
-
-<div class="bandek-stripe"></div>
 
 {{-- =========================================================
 BARRA SUPERIOR
