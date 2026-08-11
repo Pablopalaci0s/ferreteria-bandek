@@ -37,8 +37,52 @@
     <meta name="twitter:image" content="{{ $ogImagen }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        body.oscuro { background-color: #111827; color: #e5e7eb; }
+
+        body.oscuro .bg-white { background-color: #1f2937 !important; }
+        body.oscuro .bg-gray-50 { background-color: #111827 !important; }
+        body.oscuro .bg-gray-100 { background-color: #1f2937 !important; }
+        body.oscuro .bg-amber-50 { background-color: #1f2937 !important; }
+
+        body.oscuro .text-gray-900 { color: #f3f4f6 !important; }
+        body.oscuro .text-gray-800 { color: #e5e7eb !important; }
+        body.oscuro .text-gray-700 { color: #d1d5db !important; }
+        body.oscuro .text-gray-600 { color: #9ca3af !important; }
+        body.oscuro .text-gray-500 { color: #9ca3af !important; }
+        body.oscuro .text-gray-400 { color: #6b7280 !important; }
+
+        body.oscuro .text-red-800,
+        body.oscuro .text-red-700 { color: #f87171 !important; }
+
+        body.oscuro .border,
+        body.oscuro .border-t,
+        body.oscuro .border-b,
+        body.oscuro .border-y { border-color: #374151 !important; }
+
+        body.oscuro input,
+        body.oscuro select,
+        body.oscuro textarea {
+            background-color: #1f2937 !important;
+            color: #e5e7eb !important;
+            border-color: #374151 !important;
+        }
+        body.oscuro input::placeholder { color: #6b7280 !important; }
+
+        body.oscuro .hover\:bg-gray-50:hover { background-color: #374151 !important; }
+
+        body.oscuro .bandek-benefit { background: #1f2937 !important; border-color: #374151 !important; }
+        body.oscuro .bandek-cat-circle { background: #1f2937 !important; border-color: #374151 !important; }
+        body.oscuro .bandek-cat-label { color: #e5e7eb !important; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body
+    class="bg-gray-50 text-gray-800 font-sans"
+    x-data="{ oscuro: localStorage.getItem('bandek-modo-oscuro') === '1' }"
+    x-init="$watch('oscuro', v => localStorage.setItem('bandek-modo-oscuro', v ? '1' : '0'))"
+    :class="{ 'oscuro': oscuro }"
+>
 
 
 {{-- =========================================================
@@ -370,6 +414,47 @@ x-for="producto in productos"
         ================================================== --}}
 
         <div class="ml-auto flex items-center gap-3 sm:gap-5 shrink-0">
+
+
+            {{-- =================================================
+                 MODO OSCURO
+            ================================================== --}}
+
+            <button
+                type="button"
+                @click="oscuro = !oscuro"
+                class="text-gray-600 hover:text-red-800 transition"
+                aria-label="Cambiar a modo oscuro"
+            >
+
+                <svg
+                    x-show="!oscuro"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.36 6.36l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                </svg>
+
+                <svg
+                    x-show="oscuro"
+                    x-cloak
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                </svg>
+
+            </button>
 
 
             {{-- =================================================
