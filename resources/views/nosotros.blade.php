@@ -72,22 +72,22 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-                <div class="bg-gray-50 border rounded-lg p-6 text-center">
+                <div class="bandek-card bg-gray-50 border rounded-lg p-6 text-center">
                     <p class="text-3xl font-bold text-red-800 mb-1">+15</p>
                     <p class="text-sm text-gray-600">Años de experiencia</p>
                 </div>
 
-                <div class="bg-gray-50 border rounded-lg p-6 text-center">
+                <div class="bandek-card bg-gray-50 border rounded-lg p-6 text-center">
                     <p class="text-3xl font-bold text-red-800 mb-1">+2,000</p>
                     <p class="text-sm text-gray-600">Productos disponibles</p>
                 </div>
 
-                <div class="bg-gray-50 border rounded-lg p-6 text-center">
+                <div class="bandek-card bg-gray-50 border rounded-lg p-6 text-center">
                     <p class="text-3xl font-bold text-red-800 mb-1">+500</p>
                     <p class="text-sm text-gray-600">Clientes atendidos</p>
                 </div>
 
-                <div class="bg-gray-50 border rounded-lg p-6 text-center">
+                <div class="bandek-card bg-gray-50 border rounded-lg p-6 text-center">
                     <p class="text-3xl font-bold text-red-800 mb-1">100%</p>
                     <p class="text-sm text-gray-600">Asesoría técnica</p>
                 </div>
@@ -113,7 +113,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-            <div class="bg-white border rounded-lg p-6">
+            <div class="bandek-card bg-white border rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-3">Misión</h3>
                 <p class="text-sm text-gray-600 leading-6">
                     Proveer materiales de construcción, herramientas y soluciones
@@ -122,7 +122,7 @@
                 </p>
             </div>
 
-            <div class="bg-white border rounded-lg p-6">
+            <div class="bandek-card bg-white border rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-3">Visión</h3>
                 <p class="text-sm text-gray-600 leading-6">
                     Ser la ferretería de referencia en El Salvador, reconocida por
@@ -131,7 +131,7 @@
                 </p>
             </div>
 
-            <div class="bg-white border rounded-lg p-6">
+            <div class="bandek-card bg-white border rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-3">Valores</h3>
                 <p class="text-sm text-gray-600 leading-6">
                     Honestidad en cada recomendación, calidad en cada producto,
@@ -203,12 +203,12 @@
 
             <a href="https://wa.me/{{ \App\Models\Configuracion::where('clave', 'whatsapp_numero')->value('valor') }}"
                target="_blank" rel="noopener noreferrer"
-               class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-md transition">
+               class="bandek-btn-cta bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-md transition">
                 Contactar por WhatsApp
             </a>
 
             <a href="{{ route('catalogo.index') }}"
-               class="bg-red-800 hover:bg-red-900 text-white font-semibold px-6 py-3 rounded-md transition">
+               class="bandek-btn-cta bg-red-800 hover:bg-red-900 text-white font-semibold px-6 py-3 rounded-md transition">
                 Ver catálogo
             </a>
 

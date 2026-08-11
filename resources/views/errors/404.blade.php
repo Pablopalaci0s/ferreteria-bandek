@@ -18,12 +18,12 @@
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
 
             <a href="{{ route('inicio') }}"
-               class="bg-red-800 hover:bg-red-900 text-white font-semibold px-6 py-3 rounded-md transition">
+               class="bandek-btn-cta bg-red-800 hover:bg-red-900 text-white font-semibold px-6 py-3 rounded-md transition">
                 Ir al inicio
             </a>
 
             <a href="{{ route('catalogo.index') }}"
-               class="bg-white border border-gray-300 hover:border-red-800 text-gray-700 font-semibold px-6 py-3 rounded-md transition">
+               class="bandek-btn-cta bg-white border border-gray-300 hover:border-red-800 text-gray-700 font-semibold px-6 py-3 rounded-md transition">
                 Ver catálogo
             </a>
 

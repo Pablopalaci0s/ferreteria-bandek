@@ -187,7 +187,7 @@
             >
 
                 <div
-                    class="bg-white rounded-lg border
+                    class="bandek-card bg-white rounded-lg border
                            overflow-hidden flex flex-col relative"
                 >
 
@@ -250,7 +250,7 @@
 
                         <a
                             :href="producto.url"
-                            class="mt-auto bg-red-700
+                            class="bandek-btn-cta mt-auto bg-red-700
                                    hover:bg-red-800
                                    text-white text-sm font-semibold
                                    text-center py-2 rounded-md"

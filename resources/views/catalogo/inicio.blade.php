@@ -121,7 +121,7 @@
                         Todo para construir<br>con confianza
                     </h1>
                     <p class="text-gray-600 mb-6">Herramientas, materiales y soluciones de calidad para tus proyectos.</p>
-                    <a href="{{ route('catalogo.index') }}" class="bg-red-800 hover:bg-red-900 text-white font-semibold px-6 py-3 rounded-md inline-block">
+                    <a href="{{ route('catalogo.index') }}" class="bandek-btn-cta bg-red-800 hover:bg-red-900 text-white font-semibold px-6 py-3 rounded-md inline-block">
                         Conocer ofertas
                     </a>
                 </div>
@@ -144,11 +144,13 @@
         <div class="bandek-benefits-row">
 
             <div class="bandek-benefit">
-                <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h11v8H3zM14 10h4l3 3v2h-7z" />
-                    <circle cx="6.5" cy="18.5" r="1.5" />
-                    <circle cx="17.5" cy="18.5" r="1.5" />
-                </svg>
+                <span class="bandek-benefit-icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h11v8H3zM14 10h4l3 3v2h-7z" />
+                        <circle cx="6.5" cy="18.5" r="1.5" />
+                        <circle cx="17.5" cy="18.5" r="1.5" />
+                    </svg>
+                </span>
                 <div>
                     <p class="bandek-benefit-title">Envío a domicilio</p>
                     <p class="bandek-benefit-text">Coordinalo con nosotros por WhatsApp</p>
@@ -156,9 +158,11 @@
             </div>
 
             <div class="bandek-benefit">
-                <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z" />
-                </svg>
+                <span class="bandek-benefit-icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z" />
+                    </svg>
+                </span>
                 <div>
                     <p class="bandek-benefit-title">Atención inmediata</p>
                     <p class="bandek-benefit-text">Respuesta rápida por WhatsApp</p>
@@ -166,10 +170,12 @@
             </div>
 
             <div class="bandek-benefit">
-                <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
-                    <circle cx="12" cy="11" r="2.5" />
-                </svg>
+                <span class="bandek-benefit-icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                        <circle cx="12" cy="11" r="2.5" />
+                    </svg>
+                </span>
                 <div>
                     <p class="bandek-benefit-title">Retiro en tienda</p>
                     <p class="bandek-benefit-text">Recogé tu pedido cuando quieras</p>
@@ -177,9 +183,11 @@
             </div>
 
             <div class="bandek-benefit">
-                <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.775-3.775a6 6 0 01-7.936 7.936l-6.545 6.545a2.121 2.121 0 01-3-3l6.546-6.546a6 6 0 017.936-7.937l-3.767 3.768z" />
-                </svg>
+                <span class="bandek-benefit-icon-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.775-3.775a6 6 0 01-7.936 7.936l-6.545 6.545a2.121 2.121 0 01-3-3l6.546-6.546a6 6 0 017.936-7.937l-3.767 3.768z" />
+                    </svg>
+                </span>
                 <div>
                     <p class="bandek-benefit-title">Asesoría técnica</p>
                     <p class="bandek-benefit-text">Te ayudamos a elegir el producto correcto</p>

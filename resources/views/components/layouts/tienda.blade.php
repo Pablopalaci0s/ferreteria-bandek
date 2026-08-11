@@ -38,7 +38,61 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        /* =========================================================
+           TIPOGRAFÍA DE MARCA
+        ========================================================= */
+        h1, h2, .bandek-cat-label, .bandek-benefit-title {
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.01em;
+        }
+
+        /* =========================================================
+           FRANJA DECORATIVA
+        ========================================================= */
+        .bandek-stripe {
+            height: 7px;
+            background: repeating-linear-gradient(135deg, #f59e0b 0 14px, #1c1917 14px 28px);
+        }
+
+        /* =========================================================
+           TARJETAS Y BOTONES CON RELIEVE
+        ========================================================= */
+        .bandek-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .bandek-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 28px rgba(17, 24, 39, 0.12);
+        }
+
+        .bandek-btn-cta {
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+        .bandek-btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+        }
+
+        .bandek-benefit-icon-wrap {
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 9999px;
+            background: rgba(153, 27, 27, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* =========================================================
+           MODO OSCURO
+        ========================================================= */
         body.oscuro { background-color: #111827; color: #e5e7eb; }
 
         body.oscuro .bg-white { background-color: #1f2937 !important; }
@@ -46,15 +100,17 @@
         body.oscuro .bg-gray-100 { background-color: #1f2937 !important; }
         body.oscuro .bg-amber-50 { background-color: #1f2937 !important; }
 
-        body.oscuro .text-gray-900 { color: #f3f4f6 !important; }
-        body.oscuro .text-gray-800 { color: #e5e7eb !important; }
-        body.oscuro .text-gray-700 { color: #d1d5db !important; }
-        body.oscuro .text-gray-600 { color: #9ca3af !important; }
-        body.oscuro .text-gray-500 { color: #9ca3af !important; }
-        body.oscuro .text-gray-400 { color: #6b7280 !important; }
+        body.oscuro .text-gray-900 { color: #f8fafc !important; }
+        body.oscuro .text-gray-800 { color: #e2e8f0 !important; }
+        body.oscuro .text-gray-700 { color: #cbd5e1 !important; }
+        body.oscuro .text-gray-600 { color: #b0bac6 !important; }
+        body.oscuro .text-gray-500 { color: #9aa5b1 !important; }
+        body.oscuro .text-gray-400 { color: #94a3b8 !important; }
 
         body.oscuro .text-red-800,
-        body.oscuro .text-red-700 { color: #f87171 !important; }
+        body.oscuro .text-red-700,
+        body.oscuro .hover\:text-red-800:hover,
+        body.oscuro .hover\:text-red-700:hover { color: #f87171 !important; }
 
         body.oscuro .border,
         body.oscuro .border-t,
@@ -68,13 +124,16 @@
             color: #e5e7eb !important;
             border-color: #374151 !important;
         }
-        body.oscuro input::placeholder { color: #6b7280 !important; }
+        body.oscuro input::placeholder { color: #94a3b8 !important; }
 
         body.oscuro .hover\:bg-gray-50:hover { background-color: #374151 !important; }
 
         body.oscuro .bandek-benefit { background: #1f2937 !important; border-color: #374151 !important; }
         body.oscuro .bandek-cat-circle { background: #1f2937 !important; border-color: #374151 !important; }
         body.oscuro .bandek-cat-label { color: #e5e7eb !important; }
+        body.oscuro .bandek-benefit-icon-wrap { background: rgba(248, 113, 113, 0.15) !important; }
+
+        body.oscuro .bandek-card:hover { box-shadow: 0 16px 28px rgba(0, 0, 0, 0.55) !important; }
     </style>
 </head>
 <body
@@ -84,6 +143,7 @@
     :class="{ 'oscuro': oscuro }"
 >
 
+<div class="bandek-stripe"></div>
 
 {{-- =========================================================
 BARRA SUPERIOR
@@ -493,44 +553,6 @@ x-for="producto in productos"
 
             </span>
 
-
-            {{-- =================================================
-                 CARRITO
-            ================================================== --}}
-
-            <a
-                href="#"
-                class="relative flex items-center
-                       text-gray-700 hover:text-red-800 transition"
-            >
-
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-
-                </svg>
-
-                <span
-                    class="absolute -top-2 -right-2
-                           bg-red-700 text-white text-[10px]
-                           w-4 h-4 flex items-center justify-center
-                           rounded-full"
-                >
-                    0
-                </span>
-
-            </a>
 
         </div>
 

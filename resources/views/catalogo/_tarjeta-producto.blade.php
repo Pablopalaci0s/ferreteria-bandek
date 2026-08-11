@@ -1,4 +1,4 @@
-<div class="bg-white border rounded-lg overflow-hidden flex flex-col relative">
+<div class="bandek-card bg-white border rounded-lg overflow-hidden flex flex-col relative">
 
     @if ($producto->en_oferta)
         <span class="absolute top-2 left-2 z-10 bg-red-700 text-white text-[10px] font-bold uppercase px-2 py-1 rounded">
@@ -35,7 +35,7 @@
 
         <a
             href="{{ route('catalogo.show', $producto) }}"
-            class="mt-auto bg-red-700 hover:bg-red-800 text-white text-sm font-semibold text-center py-2 rounded-md"
+            class="bandek-btn-cta mt-auto bg-red-700 hover:bg-red-800 text-white text-sm font-semibold text-center py-2 rounded-md"
         >
             Comprar ahora
         </a>
