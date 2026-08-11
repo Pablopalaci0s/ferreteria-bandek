@@ -62,7 +62,7 @@ BARRA SUPERIOR
                 Nosotros
             </a>
 
-            <a href="{{ route('catalogo.index') }}"
+            <a href="{{ route('catalogo.index', ['oferta' => 1]) }}"
                class="underline font-medium hover:text-red-100">
                 Ver promociones ›
             </a>

@@ -75,6 +75,11 @@ class CatalogoController extends Controller
             $query->where('stock', '>', 0);
         }
 
+        // Solo en oferta
+        if ($request->boolean('oferta')) {
+            $query->whereNotNull('precio_oferta')->whereColumn('precio_oferta', '<', 'precio');
+        }
+
         $productos = $this->aplicarOrden($query, $request->string('orden')->toString())
             ->paginate(12)
             ->withQueryString();
@@ -142,6 +147,11 @@ class CatalogoController extends Controller
             $query->where('stock', '>', 0);
         }
 
+        // Solo en oferta
+        if ($request->boolean('oferta')) {
+            $query->whereNotNull('precio_oferta')->whereColumn('precio_oferta', '<', 'precio');
+        }
+
         $productos = $this->aplicarOrden($query, $request->input('orden'))
             ->take(12)
             ->get();
@@ -161,12 +171,18 @@ class CatalogoController extends Controller
                         2
                     ),
 
+                    'en_oferta' => $producto->en_oferta,
+
+                    'precio_oferta' => $producto->en_oferta
+                        ? number_format($producto->precio_oferta, 2)
+                        : null,
+
                     'imagen' => $producto->imagen_principal
                         ? asset(
                             'storage/' .
                             $producto->imagen_principal
                         )
-                        : 'https://placehold.co/500x500?text=BANDEK',
+                        : asset('img/logo-completo.png'),
 
                     'categoria' => $producto->categoria?->nombre,
                     'marca' => $producto->marca?->nombre,
@@ -186,7 +202,31 @@ class CatalogoController extends Controller
     {
         abort_unless($producto->activo, 404);
 
-        return view('catalogo.show', compact('producto'));
+        $relacionados = Producto::with('categoria')
+            ->where('activo', true)
+            ->where('id', '!=', $producto->id)
+            ->where('categoria_id', $producto->categoria_id)
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
+        // Si no hay suficientes de la misma categoría, completamos con la misma marca
+        if ($relacionados->count() < 4 && $producto->marca_id) {
+
+            $faltan = 4 - $relacionados->count();
+
+            $extra = Producto::where('activo', true)
+                ->where('id', '!=', $producto->id)
+                ->whereNotIn('id', $relacionados->pluck('id'))
+                ->where('marca_id', $producto->marca_id)
+                ->inRandomOrder()
+                ->take($faltan)
+                ->get();
+
+            $relacionados = $relacionados->merge($extra);
+        }
+
+        return view('catalogo.show', compact('producto', 'relacionados'));
     }
 
     /**

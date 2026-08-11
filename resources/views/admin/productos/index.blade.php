@@ -62,7 +62,12 @@
                     </td>
 
                     <td class="p-3 text-gray-500">
-                        ${{ number_format($producto->precio, 2) }}
+                        @if ($producto->en_oferta)
+                            <span class="line-through text-gray-400 text-xs block">${{ number_format($producto->precio, 2) }}</span>
+                            <span class="text-red-700 font-semibold">${{ number_format($producto->precio_oferta, 2) }}</span>
+                        @else
+                            ${{ number_format($producto->precio, 2) }}
+                        @endif
                     </td>
 
                     <td class="p-3">

@@ -131,11 +131,23 @@
         </label>
 
 
+        {{-- OFERTA --}}
+        <label class="flex items-center gap-2 text-sm text-gray-600 border rounded-md px-4 py-2 whitespace-nowrap cursor-pointer">
+            <input
+                type="checkbox"
+                x-model="oferta"
+                @change="buscarProductos()"
+                class="rounded border-gray-300 text-red-800 focus:ring-red-700"
+            >
+            Solo ofertas
+        </label>
+
+
         {{-- LIMPIAR --}}
         <button
             type="button"
             @click="limpiarFiltros()"
-            x-show="buscar || categoria || marca || orden || disponible"
+            x-show="buscar || categoria || marca || orden || disponible || oferta"
             x-cloak
             class="text-sm text-gray-500
                    hover:text-red-800 px-2"
@@ -176,8 +188,17 @@
 
                 <div
                     class="bg-white rounded-lg border
-                           overflow-hidden flex flex-col"
+                           overflow-hidden flex flex-col relative"
                 >
+
+                    {{-- Badge de oferta --}}
+                    <span
+                        x-show="producto.en_oferta"
+                        x-cloak
+                        class="absolute top-2 left-2 z-10 bg-red-700 text-white text-[10px] font-bold uppercase px-2 py-1 rounded"
+                    >
+                        Oferta
+                    </span>
 
                     {{-- Imagen --}}
                     <a :href="producto.url">
@@ -220,10 +241,12 @@
                             class="text-xs text-gray-400 mb-2"
                         ></p>
 
-                        <p
-                            class="text-red-800 font-bold mb-3"
-                            x-text="'$' + producto.precio"
-                        ></p>
+                        <p x-show="!producto.en_oferta" class="text-red-800 font-bold mb-3" x-text="'$' + producto.precio"></p>
+
+                        <p x-show="producto.en_oferta" x-cloak class="mb-3">
+                            <span class="line-through text-gray-400 text-xs block" x-text="'$' + producto.precio"></span>
+                            <span class="text-red-700 font-bold" x-text="'$' + producto.precio_oferta"></span>
+                        </p>
 
                         <a
                             :href="producto.whatsapp"
@@ -315,6 +338,7 @@ function buscadorCatalogo()
         marca: '',
         orden: '',
         disponible: false,
+        oferta: false,
 
         productos: [],
 
@@ -343,12 +367,16 @@ function buscadorCatalogo()
             this.disponible =
                 params.get('disponible') === '1';
 
+            this.oferta =
+                params.get('oferta') === '1';
+
             if (
                 this.buscar ||
                 this.categoria ||
                 this.marca ||
                 this.orden ||
-                this.disponible
+                this.disponible ||
+                this.oferta
             ) {
                 this.buscarProductos();
             }
@@ -398,6 +426,14 @@ function buscadorCatalogo()
 
                     params.append(
                         'disponible',
+                        '1'
+                    );
+                }
+
+                if (this.oferta) {
+
+                    params.append(
+                        'oferta',
                         '1'
                     );
                 }
@@ -494,6 +530,17 @@ function buscadorCatalogo()
                     );
                 }
 
+                if (this.oferta) {
+                    url.searchParams.set(
+                        'oferta',
+                        '1'
+                    );
+                } else {
+                    url.searchParams.delete(
+                        'oferta'
+                    );
+                }
+
                 window.history.replaceState(
                     {},
                     '',
@@ -520,6 +567,7 @@ function buscadorCatalogo()
             this.marca = '';
             this.orden = '';
             this.disponible = false;
+            this.oferta = false;
 
             this.productos = [];
             this.buscando = false;

@@ -93,7 +93,7 @@ $p = $producto ?? null;
 
 </div>
 
-<div class="grid grid-cols-2 gap-4 mb-5">
+<div class="mb-5" style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem;">
 
 
 <div>
@@ -111,6 +111,29 @@ $p = $producto ?? null;
     >
 
     @error('precio')
+        <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+    @enderror
+</div>
+
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">
+        Precio de oferta (opcional)
+    </label>
+
+    <input
+        type="number"
+        step="0.01"
+        name="precio_oferta"
+        value="{{ old('precio_oferta', $p->precio_oferta ?? '') }}"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700"
+        placeholder="Menor al precio de venta"
+    >
+
+    <p class="text-xs text-gray-400 mt-1">
+        Si lo llenás, el producto se muestra en oferta con el precio tachado.
+    </p>
+
+    @error('precio_oferta')
         <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
     @enderror
 </div>

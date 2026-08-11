@@ -15,6 +15,7 @@ class Producto extends Model
         'descripcion',
         'descripcion_larga',
         'precio',
+        'precio_oferta',
         'costo',
         'stock',
         'stock_minimo',
@@ -32,7 +33,18 @@ class Producto extends Model
         'activo' => 'boolean',
         'destacado' => 'boolean',
         'precio' => 'decimal:2',
+        'precio_oferta' => 'decimal:2',
     ];
+
+    public function getEnOfertaAttribute(): bool
+    {
+        return ! is_null($this->precio_oferta) && $this->precio_oferta < $this->precio;
+    }
+
+    public function getPrecioFinalAttribute()
+    {
+        return $this->en_oferta ? $this->precio_oferta : $this->precio;
+    }
 
     public function categoria()
     {
@@ -57,7 +69,7 @@ class Producto extends Model
     public function getWhatsappLinkAttribute()
     {
         $numero = Configuracion::where('clave', 'whatsapp_numero')->value('valor');
-        $mensaje = "Hola, quiero pedir: {$this->nombre} - \${$this->precio}";
+        $mensaje = "Hola, quiero pedir: {$this->nombre} - \${$this->precio_final}";
 
         return "https://wa.me/{$numero}?text=" . urlencode($mensaje);
     }

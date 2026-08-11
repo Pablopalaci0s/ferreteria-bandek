@@ -112,9 +112,24 @@ $ogDescripcion = $producto->descripcion
 
             @endif
 
-            <p class="text-3xl font-bold text-gray-900 mb-4">
-                ${{ number_format($producto->precio, 2) }}
-            </p>
+            @if ($producto->en_oferta)
+
+                <span class="inline-block bg-red-700 text-white text-xs font-bold uppercase px-2 py-1 rounded mb-2">
+                    Oferta
+                </span>
+
+                <p class="mb-4">
+                    <span class="line-through text-gray-400 text-lg block">${{ number_format($producto->precio, 2) }}</span>
+                    <span class="text-3xl font-bold text-red-700">${{ number_format($producto->precio_oferta, 2) }}</span>
+                </p>
+
+            @else
+
+                <p class="text-3xl font-bold text-gray-900 mb-4">
+                    ${{ number_format($producto->precio, 2) }}
+                </p>
+
+            @endif
 
             @if ($producto->descripcion)
 
@@ -159,6 +174,26 @@ $ogDescripcion = $producto->descripcion
 
             <div class="text-gray-600 whitespace-pre-line leading-relaxed">
                 {{ $producto->descripcion_larga }}
+            </div>
+
+        </div>
+
+    @endif
+
+
+    {{-- PRODUCTOS RELACIONADOS --}}
+    @if ($relacionados->isNotEmpty())
+
+        <div class="mt-12 border-t pt-8">
+
+            <h2 class="text-lg font-bold text-gray-900 mb-6">
+                Productos relacionados
+            </h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                @foreach ($relacionados as $relacionado)
+                    @include('catalogo._tarjeta-producto', ['producto' => $relacionado])
+                @endforeach
             </div>
 
         </div>

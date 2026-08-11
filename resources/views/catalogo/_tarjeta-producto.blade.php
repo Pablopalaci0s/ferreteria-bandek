@@ -1,10 +1,16 @@
-<div class="bg-white border rounded-lg overflow-hidden flex flex-col">
+<div class="bg-white border rounded-lg overflow-hidden flex flex-col relative">
+
+    @if ($producto->en_oferta)
+        <span class="absolute top-2 left-2 z-10 bg-red-700 text-white text-[10px] font-bold uppercase px-2 py-1 rounded">
+            Oferta
+        </span>
+    @endif
 
     <a href="{{ route('catalogo.show', $producto) }}">
         <img
             src="{{ $producto->imagen_principal
                 ? asset('storage/' . $producto->imagen_principal)
-                : 'https://placehold.co/300x300?text=BANDEK' }}"
+                : asset('img/logo-completo.png') }}"
             alt="{{ $producto->nombre }}"
             class="w-full h-40 object-cover"
         >
@@ -16,9 +22,16 @@
             {{ $producto->nombre }}
         </h3>
 
-        <p class="text-red-800 font-bold mb-3">
-            ${{ number_format($producto->precio, 2) }}
-        </p>
+        @if ($producto->en_oferta)
+            <p class="mb-3">
+                <span class="line-through text-gray-400 text-xs block">${{ number_format($producto->precio, 2) }}</span>
+                <span class="text-red-700 font-bold">${{ number_format($producto->precio_oferta, 2) }}</span>
+            </p>
+        @else
+            <p class="text-red-800 font-bold mb-3">
+                ${{ number_format($producto->precio, 2) }}
+            </p>
+        @endif
 
         <a
             href="{{ $producto->whatsapp_link }}"

@@ -124,6 +124,7 @@ class ProductoController extends Controller
             'descripcion_larga' => 'nullable|string',
 
             'precio' => 'required|numeric|min:0',
+            'precio_oferta' => 'nullable|numeric|min:0|lt:precio',
             'costo' => 'nullable|numeric|min:0',
             'stock_minimo' => 'required|integer|min:0',
 
