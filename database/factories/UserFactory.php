@@ -30,6 +30,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'rol' => 'vendedor',
         ];
     }
 
@@ -40,6 +41,26 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Usuario con rol de administrador (acceso total al panel).
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rol' => 'admin',
+        ]);
+    }
+
+    /**
+     * Usuario con rol de vendedor (cambios de precio requieren aprobación).
+     */
+    public function vendedor(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rol' => 'vendedor',
         ]);
     }
 }

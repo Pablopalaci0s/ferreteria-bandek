@@ -6,13 +6,14 @@
         </span>
     @endif
 
-    <a href="{{ route('catalogo.show', $producto) }}">
+    <a href="{{ route('catalogo.show', $producto) }}" class="block bg-white">
         <img
             src="{{ $producto->imagen_principal
-                ? asset('storage/' . $producto->imagen_principal)
+                ? asset('storage/' . $producto->imagen_thumb)
                 : asset('img/logo-completo.png') }}"
             alt="{{ $producto->nombre }}"
-            class="w-full h-40 object-cover"
+            loading="lazy"
+            class="w-full h-40 object-contain p-2"
         >
     </a>
 

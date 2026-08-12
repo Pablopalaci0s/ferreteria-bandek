@@ -39,15 +39,16 @@ class InventarioController extends Controller
     {
         $validado = $request->validate([
             'producto_id' => 'required|exists:productos,id',
-            'tipo' => 'required|in:entrada,salida,ajuste',
+            // Las salidas por venta las genera el módulo de Ventas, no acá.
+            'tipo' => 'required|in:entrada,ajuste,devolucion,perdida',
             'cantidad' => 'required|integer|min:0',
             'motivo' => 'nullable|string|max:255',
         ]);
 
         $producto = Producto::findOrFail($validado['producto_id']);
 
-        if ($validado['tipo'] === 'salida' && $validado['cantidad'] > $producto->stock) {
-            return back()->withErrors(['cantidad' => 'No hay suficiente stock para esta salida (stock actual: ' . $producto->stock . ').'])->withInput();
+        if ($validado['tipo'] === 'perdida' && $validado['cantidad'] > $producto->stock) {
+            return back()->withErrors(['cantidad' => 'No podés registrar una pérdida mayor al stock actual ('.$producto->stock.').'])->withInput();
         }
 
         $producto->registrarMovimiento(
@@ -57,6 +58,6 @@ class InventarioController extends Controller
             auth()->id()
         );
 
-        return redirect()->route('admin.inventario.index')->with('status', 'Movimiento registrado. Nuevo stock de ' . $producto->nombre . ': ' . $producto->stock);
+        return redirect()->route('admin.inventario.index')->with('status', 'Movimiento registrado. Nuevo stock de '.$producto->nombre.': '.$producto->stock);
     }
 }

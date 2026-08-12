@@ -127,6 +127,11 @@
         Productos
         </a>
 
+        <a href="{{ route('admin.ventas.index') }}"
+        class="flex items-center gap-3 px-5 py-2.5 text-sm {{ request()->routeIs('admin.ventas.*') ? 'bg-red-800 text-white' : 'hover:bg-gray-800' }}">
+        Ventas
+        </a>
+
         <a href="{{ route('admin.inventario.index') }}"
         class="flex items-center gap-3 px-5 py-2.5 text-sm {{ request()->routeIs('admin.inventario.*') ? 'bg-red-800 text-white' : 'hover:bg-gray-800' }}">
         Inventario

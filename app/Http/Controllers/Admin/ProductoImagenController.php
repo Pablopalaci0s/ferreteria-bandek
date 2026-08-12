@@ -6,22 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\ImagenProducto;
 use App\Models\Producto;
 use App\Support\ImagenOptimizada;
+use App\Support\ReglaImagen;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProductoImagenController extends Controller
 {
     public function store(Request $request, Producto $producto)
     {
         $request->validate([
-            'imagenes' => 'required|array',
-            'imagenes.*' => 'image|max:2048',
+            'imagenes' => 'required|array|max:12',
+            'imagenes.*' => ReglaImagen::reglas(requerida: false),
         ]);
 
         $orden = ($producto->imagenes()->max('orden') ?? -1) + 1;
 
         foreach ($request->file('imagenes') as $archivo) {
-            $ruta = ImagenOptimizada::guardar($archivo, 'productos', 1400, 82);
+            $ruta = ImagenOptimizada::guardar($archivo, 'productos', 1400, 1400, 82, thumbnail: 500);
 
             $producto->imagenes()->create([
                 'ruta' => $ruta,
@@ -38,7 +38,7 @@ class ProductoImagenController extends Controller
     {
         abort_unless($imagen->producto_id === $producto->id, 404);
 
-        Storage::disk('public')->delete($imagen->ruta);
+        ImagenOptimizada::eliminar($imagen->ruta);
         $imagen->delete();
 
         return back()->with('status', 'Imagen eliminada.');

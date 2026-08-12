@@ -56,12 +56,17 @@
 
                 <option value="entrada"
                     @selected(old('tipo') == 'entrada')>
-                    Entrada (suma al stock)
+                    Entrada de mercadería (suma al stock)
                 </option>
 
-                <option value="salida"
-                    @selected(old('tipo') == 'salida')>
-                    Salida (resta del stock)
+                <option value="devolucion"
+                    @selected(old('tipo') == 'devolucion')>
+                    Devolución (suma al stock)
+                </option>
+
+                <option value="perdida"
+                    @selected(old('tipo') == 'perdida')>
+                    Pérdida / daño (resta del stock)
                 </option>
 
                 <option value="ajuste"

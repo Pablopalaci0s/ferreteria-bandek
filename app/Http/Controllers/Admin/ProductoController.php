@@ -10,8 +10,8 @@ use App\Models\Proveedor;
 use App\Models\SolicitudPrecio;
 use App\Models\UnidadMedida;
 use App\Support\ImagenOptimizada;
+use App\Support\ReglaImagen;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductoController extends Controller
@@ -44,11 +44,11 @@ class ProductoController extends Controller
     {
         $validado = $this->validarDatos($request);
 
-        $validado['slug'] = Str::slug($validado['nombre']) . '-' . uniqid();
+        $validado['slug'] = Str::slug($validado['nombre']).'-'.uniqid();
 
         if ($request->hasFile('imagen_principal')) {
             $validado['imagen_principal'] =
-                ImagenOptimizada::guardar($request->file('imagen_principal'), 'productos', 1400, 82);
+                ImagenOptimizada::guardar($request->file('imagen_principal'), 'productos', 1400, 1400, 82, thumbnail: 500);
         }
 
         Producto::create($validado);
@@ -75,13 +75,10 @@ class ProductoController extends Controller
 
         if ($request->hasFile('imagen_principal')) {
 
-            if ($producto->imagen_principal) {
-                Storage::disk('public')
-                    ->delete($producto->imagen_principal);
-            }
+            ImagenOptimizada::eliminar($producto->imagen_principal);
 
             $validado['imagen_principal'] =
-                ImagenOptimizada::guardar($request->file('imagen_principal'), 'productos', 1400, 82);
+                ImagenOptimizada::guardar($request->file('imagen_principal'), 'productos', 1400, 1400, 82, thumbnail: 500);
         }
 
         $usuario = $request->user();
@@ -149,9 +146,10 @@ class ProductoController extends Controller
 
     public function destroy(Producto $producto)
     {
-        if ($producto->imagen_principal) {
-            Storage::disk('public')
-                ->delete($producto->imagen_principal);
+        ImagenOptimizada::eliminar($producto->imagen_principal);
+
+        foreach ($producto->imagenes as $imagen) {
+            ImagenOptimizada::eliminar($imagen->ruta);
         }
 
         $producto->delete();
@@ -191,11 +189,10 @@ class ProductoController extends Controller
             'proveedor_id' => 'nullable|exists:proveedores,id',
             'unidad_medida_id' => 'required|exists:unidades_medida,id',
 
-            'imagen_principal' => 'nullable|image|max:2048',
+            'imagen_principal' => ReglaImagen::reglas(requerida: false),
 
             'activo' => 'boolean',
             'destacado' => 'boolean',
         ]);
     }
 }
-

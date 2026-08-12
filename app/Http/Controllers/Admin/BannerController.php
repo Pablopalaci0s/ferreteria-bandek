@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Support\ImagenOptimizada;
+use App\Support\ReglaImagen;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
     public function index(Request $request)
     {
         $banners = Banner::when($request->filled('buscar'), function ($q) use ($request) {
-                $q->where('titulo', 'like', '%' . $request->string('buscar') . '%');
-            })
+            $q->where('titulo', 'like', '%'.$request->string('buscar').'%');
+        })
             ->orderBy('orden')
             ->orderByDesc('id')
             ->get();
@@ -31,7 +31,7 @@ class BannerController extends Controller
     {
         $validado = $this->validarDatos($request);
 
-        $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'banners', 1920, 82);
+        $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'banners', 1920, 1200, 82);
 
         Banner::create($validado);
 
@@ -51,11 +51,9 @@ class BannerController extends Controller
 
         if ($request->hasFile('imagen')) {
 
-            if ($banner->imagen) {
-                Storage::disk('public')->delete($banner->imagen);
-            }
+            ImagenOptimizada::eliminar($banner->imagen);
 
-            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'banners', 1920, 82);
+            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'banners', 1920, 1200, 82);
         }
 
         $banner->update($validado);
@@ -67,9 +65,7 @@ class BannerController extends Controller
 
     public function destroy(Banner $banner)
     {
-        if ($banner->imagen) {
-            Storage::disk('public')->delete($banner->imagen);
-        }
+        ImagenOptimizada::eliminar($banner->imagen);
 
         $banner->delete();
 
@@ -85,7 +81,7 @@ class BannerController extends Controller
             'link' => 'nullable|string|max:255',
             'orden' => 'nullable|integer|min:0',
             'activo' => 'boolean',
-            'imagen' => ($esCreacion ? 'required' : 'nullable') . '|image|max:4096',
+            'imagen' => ReglaImagen::reglas(requerida: $esCreacion),
         ]);
     }
 }

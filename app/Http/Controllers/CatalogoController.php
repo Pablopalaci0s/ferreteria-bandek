@@ -179,8 +179,8 @@ class CatalogoController extends Controller
 
                     'imagen' => $producto->imagen_principal
                         ? asset(
-                            'storage/' .
-                            $producto->imagen_principal
+                            'storage/'.
+                            $producto->imagen_thumb
                         )
                         : asset('img/logo-completo.png'),
 
@@ -242,4 +242,3 @@ class CatalogoController extends Controller
         };
     }
 }
-

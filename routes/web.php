@@ -1,38 +1,45 @@
 <?php
 
+use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\CategoriaController;
+use App\Http\Controllers\Admin\ConfiguracionController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ImportarProductosController;
+use App\Http\Controllers\Admin\InventarioController;
+use App\Http\Controllers\Admin\MarcaController;
+use App\Http\Controllers\Admin\ProductoController;
+use App\Http\Controllers\Admin\ProductoImagenController;
+use App\Http\Controllers\Admin\ProveedorController;
+use App\Http\Controllers\Admin\SolicitudPrecioController;
+use App\Http\Controllers\Admin\UsuarioController;
+use App\Http\Controllers\Admin\VentaController;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::get('/', [CatalogoController::class, 'inicio'])
     ->name('inicio');
 
-
 Route::get('/catalogo', [CatalogoController::class, 'index'])
     ->name('catalogo.index');
 
-
 Route::get('/catalogo/buscar', [CatalogoController::class, 'buscar'])
+    ->middleware('throttle:60,1')
     ->name('catalogo.buscar');
-
 
 Route::get('/producto/{producto}', [CatalogoController::class, 'show'])
     ->name('catalogo.show');
 
-
 Route::view('/nosotros', 'nosotros')
     ->name('nosotros');
 
-
-Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])
     ->name('sitemap');
-
 
 Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
 
 Route::middleware('auth')->group(function () {
 
@@ -45,165 +52,173 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
-
     Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/', [
-            \App\Http\Controllers\Admin\DashboardController::class,
-            'index'
+            DashboardController::class,
+            'index',
         ])->name('dashboard');
-
 
         Route::resource(
             'categorias',
-            \App\Http\Controllers\Admin\CategoriaController::class
+            CategoriaController::class
         );
-
 
         Route::resource(
             'marcas',
-            \App\Http\Controllers\Admin\MarcaController::class
+            MarcaController::class
         );
-
 
         Route::resource(
             'proveedores',
-            \App\Http\Controllers\Admin\ProveedorController::class
+            ProveedorController::class
         )->parameters([
             'proveedores' => 'proveedor',
         ]);
 
-
         Route::get('productos/importar', [
-            \App\Http\Controllers\Admin\ImportarProductosController::class,
-            'formulario'
+            ImportarProductosController::class,
+            'formulario',
         ])->name('productos.importar');
 
-
         Route::post('productos/importar', [
-            \App\Http\Controllers\Admin\ImportarProductosController::class,
-            'procesar'
+            ImportarProductosController::class,
+            'procesar',
         ])->name('productos.importar.procesar');
 
-
         Route::get('productos/plantilla', [
-            \App\Http\Controllers\Admin\ImportarProductosController::class,
-            'plantilla'
+            ImportarProductosController::class,
+            'plantilla',
         ])->name('productos.plantilla');
-
 
         Route::resource(
             'productos',
-            \App\Http\Controllers\Admin\ProductoController::class
+            ProductoController::class
         );
 
-
         Route::post('productos/{producto}/imagenes', [
-            \App\Http\Controllers\Admin\ProductoImagenController::class,
-            'store'
+            ProductoImagenController::class,
+            'store',
         ])->name('productos.imagenes.store');
 
-
         Route::delete('productos/{producto}/imagenes/{imagen}', [
-            \App\Http\Controllers\Admin\ProductoImagenController::class,
-            'destroy'
+            ProductoImagenController::class,
+            'destroy',
         ])->name('productos.imagenes.destroy');
-
 
         Route::resource(
             'banners',
-            \App\Http\Controllers\Admin\BannerController::class
+            BannerController::class
         );
 
+        Route::get('ventas', [
+            VentaController::class,
+            'index',
+        ])->name('ventas.index');
+
+        Route::get('ventas/crear', [
+            VentaController::class,
+            'create',
+        ])->name('ventas.create');
+
+        Route::get('ventas/buscar-productos', [
+            VentaController::class,
+            'buscarProductos',
+        ])->name('ventas.buscar-productos');
+
+        Route::post('ventas', [
+            VentaController::class,
+            'store',
+        ])->name('ventas.store');
+
+        Route::get('ventas/{venta}', [
+            VentaController::class,
+            'show',
+        ])->name('ventas.show');
+
+        Route::put('ventas/{venta}/confirmar', [
+            VentaController::class,
+            'confirmar',
+        ])->name('ventas.confirmar');
+
+        Route::put('ventas/{venta}/cancelar', [
+            VentaController::class,
+            'cancelar',
+        ])->name('ventas.cancelar');
 
         Route::get('inventario', [
-            \App\Http\Controllers\Admin\InventarioController::class,
-            'index'
+            InventarioController::class,
+            'index',
         ])->name('inventario.index');
 
-
         Route::get('inventario/nuevo', [
-            \App\Http\Controllers\Admin\InventarioController::class,
-            'create'
+            InventarioController::class,
+            'create',
         ])->name('inventario.create');
 
-
         Route::post('inventario', [
-            \App\Http\Controllers\Admin\InventarioController::class,
-            'store'
+            InventarioController::class,
+            'store',
         ])->name('inventario.store');
-
 
         Route::middleware('admin')->group(function () {
 
             Route::get('configuracion', [
-                \App\Http\Controllers\Admin\ConfiguracionController::class,
-                'edit'
+                ConfiguracionController::class,
+                'edit',
             ])->name('configuracion.edit');
 
-
             Route::put('configuracion', [
-                \App\Http\Controllers\Admin\ConfiguracionController::class,
-                'update'
+                ConfiguracionController::class,
+                'update',
             ])->name('configuracion.update');
 
-
             Route::get('solicitudes-precio', [
-                \App\Http\Controllers\Admin\SolicitudPrecioController::class,
-                'index'
+                SolicitudPrecioController::class,
+                'index',
             ])->name('solicitudes-precio.index');
 
-
             Route::put('solicitudes-precio/{solicitud}/aprobar', [
-                \App\Http\Controllers\Admin\SolicitudPrecioController::class,
-                'aprobar'
+                SolicitudPrecioController::class,
+                'aprobar',
             ])->name('solicitudes-precio.aprobar');
 
-
             Route::put('solicitudes-precio/{solicitud}/rechazar', [
-                \App\Http\Controllers\Admin\SolicitudPrecioController::class,
-                'rechazar'
+                SolicitudPrecioController::class,
+                'rechazar',
             ])->name('solicitudes-precio.rechazar');
 
-
             Route::get('usuarios', [
-                \App\Http\Controllers\Admin\UsuarioController::class,
-                'index'
+                UsuarioController::class,
+                'index',
             ])->name('usuarios.index');
 
-
             Route::get('usuarios/create', [
-                \App\Http\Controllers\Admin\UsuarioController::class,
-                'create'
+                UsuarioController::class,
+                'create',
             ])->name('usuarios.create');
 
-
             Route::post('usuarios', [
-                \App\Http\Controllers\Admin\UsuarioController::class,
-                'store'
+                UsuarioController::class,
+                'store',
             ])->name('usuarios.store');
 
-
             Route::get('usuarios/{usuario}/edit', [
-                \App\Http\Controllers\Admin\UsuarioController::class,
-                'edit'
+                UsuarioController::class,
+                'edit',
             ])->name('usuarios.edit');
 
-
             Route::put('usuarios/{usuario}', [
-                \App\Http\Controllers\Admin\UsuarioController::class,
-                'update'
+                UsuarioController::class,
+                'update',
             ])->name('usuarios.update');
 
-
             Route::delete('usuarios/{usuario}', [
-                \App\Http\Controllers\Admin\UsuarioController::class,
-                'destroy'
+                UsuarioController::class,
+                'destroy',
             ])->name('usuarios.destroy');
         });
     });
 });
 
-
 require __DIR__.'/auth.php';
-

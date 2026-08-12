@@ -79,12 +79,19 @@
             <tbody class="divide-y">
                 @forelse ($movimientosRecientes as $movimiento)
                     @php
-                        $colores = ['entrada' => 'bg-green-100 text-green-700', 'salida' => 'bg-red-100 text-red-700', 'ajuste' => 'bg-amber-100 text-amber-700'];
+                        $colores = [
+                            'entrada' => 'bg-green-100 text-green-700',
+                            'devolucion' => 'bg-emerald-100 text-emerald-700',
+                            'venta' => 'bg-red-100 text-red-700',
+                            'salida' => 'bg-red-100 text-red-700',
+                            'perdida' => 'bg-orange-100 text-orange-700',
+                            'ajuste' => 'bg-amber-100 text-amber-700',
+                        ];
                     @endphp
                     <tr class="hover:bg-gray-50">
                         <td class="p-3 text-gray-800">{{ $movimiento->producto->nombre }}</td>
                         <td class="p-3">
-                            <span class="px-2 py-0.5 rounded-full text-xs font-medium {{ $colores[$movimiento->tipo] }}">
+                            <span class="px-2 py-0.5 rounded-full text-xs font-medium {{ $colores[$movimiento->tipo] ?? 'bg-gray-100 text-gray-500' }}">
                                 {{ ucfirst($movimiento->tipo) }}
                             </span>
                         </td>

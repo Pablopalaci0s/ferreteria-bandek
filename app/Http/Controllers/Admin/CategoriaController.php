@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Categoria;
 use App\Support\ImagenOptimizada;
+use App\Support\ReglaImagen;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoriaController extends Controller
@@ -15,7 +15,7 @@ class CategoriaController extends Controller
     {
         $categorias = Categoria::withCount('productos')
             ->when($request->filled('buscar'), function ($q) use ($request) {
-                $q->where('nombre', 'like', '%' . $request->string('buscar') . '%');
+                $q->where('nombre', 'like', '%'.$request->string('buscar').'%');
             })
             ->latest()
             ->paginate(15)
@@ -37,13 +37,13 @@ class CategoriaController extends Controller
             'nombre' => 'required|string|max:150',
             'categoria_padre_id' => 'nullable|exists:categorias,id',
             'activo' => 'boolean',
-            'imagen' => 'nullable|image|max:2048',
+            'imagen' => ReglaImagen::reglas(requerida: false),
         ]);
 
         $validado['slug'] = Str::slug($validado['nombre']);
 
         if ($request->hasFile('imagen')) {
-            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'categorias', 800, 82);
+            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'categorias', 800, 800, 82, thumbnail: 400);
         }
 
         Categoria::create($validado);
@@ -71,18 +71,16 @@ class CategoriaController extends Controller
             'nombre' => 'required|string|max:150',
             'categoria_padre_id' => 'nullable|exists:categorias,id',
             'activo' => 'boolean',
-            'imagen' => 'nullable|image|max:2048',
+            'imagen' => ReglaImagen::reglas(requerida: false),
         ]);
 
         $validado['slug'] = Str::slug($validado['nombre']);
 
         if ($request->hasFile('imagen')) {
 
-            if ($categoria->imagen) {
-                Storage::disk('public')->delete($categoria->imagen);
-            }
+            ImagenOptimizada::eliminar($categoria->imagen);
 
-            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'categorias', 800, 82);
+            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'categorias', 800, 800, 82, thumbnail: 400);
         }
 
         $categoria->update($validado);
@@ -94,9 +92,7 @@ class CategoriaController extends Controller
 
     public function destroy(Categoria $categoria)
     {
-        if ($categoria->imagen) {
-            Storage::disk('public')->delete($categoria->imagen);
-        }
+        ImagenOptimizada::eliminar($categoria->imagen);
 
         $categoria->delete();
 

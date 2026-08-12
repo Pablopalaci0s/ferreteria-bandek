@@ -45,7 +45,10 @@
                     @php
                         $colores = [
                             'entrada' => 'bg-green-100 text-green-700',
+                            'devolucion' => 'bg-emerald-100 text-emerald-700',
+                            'venta' => 'bg-red-100 text-red-700',
                             'salida' => 'bg-red-100 text-red-700',
+                            'perdida' => 'bg-orange-100 text-orange-700',
                             'ajuste' => 'bg-amber-100 text-amber-700',
                         ];
                     @endphp

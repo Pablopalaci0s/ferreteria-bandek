@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\CabecerasSeguridad;
+use App\Http\Middleware\EsAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -13,7 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'admin' => \App\Http\Middleware\EsAdmin::class,
+            'admin' => EsAdmin::class,
+        ]);
+
+        $middleware->web(append: [
+            CabecerasSeguridad::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
