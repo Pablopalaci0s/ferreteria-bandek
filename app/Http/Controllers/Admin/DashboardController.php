@@ -13,8 +13,9 @@ class DashboardController extends Controller
     {
         $totalProductos = Producto::where('activo', true)->count();
 
+        // Productos por debajo (o en) su stock mínimo configurado.
         $productosStockBajo = Producto::where('activo', true)
-            ->where('stock', '<=', 10)
+            ->whereColumn('stock', '<=', 'stock_minimo')
             ->orderBy('stock')
             ->get();
 

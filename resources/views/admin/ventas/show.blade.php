@@ -21,6 +21,12 @@
         </div>
     @endif
 
+    @if (session('alerta_stock'))
+        <div class="bg-amber-50 text-amber-800 border border-amber-200 px-4 py-2 rounded-md mb-4 text-sm">
+            ⚠️ {{ session('alerta_stock') }}
+        </div>
+    @endif
+
     @php
         $colores = [
             'pendiente' => 'bg-amber-100 text-amber-700',
@@ -93,6 +99,15 @@
                     </p>
                 @endif
             </div>
+
+            @if ($venta->estado === 'confirmada')
+                <div class="border-t pt-4">
+                    <a href="{{ route('admin.ventas.ticket', $venta) }}" target="_blank"
+                       class="block text-center w-full bg-gray-900 hover:bg-black text-white text-sm font-medium px-4 py-2.5 rounded-md">
+                        Ver comprobante
+                    </a>
+                </div>
+            @endif
 
             @if ($venta->estado === 'pendiente')
                 <div class="border-t pt-4 space-y-2">

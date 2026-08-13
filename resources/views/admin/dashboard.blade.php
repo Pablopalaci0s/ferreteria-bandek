@@ -14,7 +14,7 @@
     </div>
 
     <div class="bg-white p-5 rounded-lg border">
-        <p class="text-xs text-gray-500 uppercase font-medium mb-1">Stock bajo (≤10)</p>
+        <p class="text-xs text-gray-500 uppercase font-medium mb-1">Bajo el mínimo</p>
         <p class="text-2xl font-semibold {{ $productosStockBajo->count() > 0 ? 'text-red-700' : 'text-gray-800' }}">
             {{ $productosStockBajo->count() }}
         </p>

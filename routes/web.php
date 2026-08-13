@@ -126,6 +126,11 @@ Route::middleware('auth')->group(function () {
             'buscarProductos',
         ])->name('ventas.buscar-productos');
 
+        Route::get('ventas/reportes', [
+            VentaController::class,
+            'reportes',
+        ])->name('ventas.reportes');
+
         Route::post('ventas', [
             VentaController::class,
             'store',
@@ -135,6 +140,11 @@ Route::middleware('auth')->group(function () {
             VentaController::class,
             'show',
         ])->name('ventas.show');
+
+        Route::get('ventas/{venta}/ticket', [
+            VentaController::class,
+            'ticket',
+        ])->name('ventas.ticket');
 
         Route::put('ventas/{venta}/confirmar', [
             VentaController::class,

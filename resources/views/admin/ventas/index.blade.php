@@ -28,10 +28,16 @@
                class="text-sm px-3 py-1.5 rounded-md border {{ request('estado') === 'cancelada' ? 'bg-gray-900 text-white' : 'bg-white text-gray-600' }}">Canceladas</a>
         </div>
 
-        <a href="{{ route('admin.ventas.create') }}"
-           class="bg-red-800 hover:bg-red-900 text-white text-sm font-medium px-4 py-2 rounded-md">
-            + Nueva venta
-        </a>
+        <div class="flex gap-2">
+            <a href="{{ route('admin.ventas.reportes') }}"
+               class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium px-4 py-2 rounded-md">
+                Reportes
+            </a>
+            <a href="{{ route('admin.ventas.create') }}"
+               class="bg-red-800 hover:bg-red-900 text-white text-sm font-medium px-4 py-2 rounded-md">
+                + Nueva venta
+            </a>
+        </div>
     </div>
 
     <div class="bg-white border rounded-lg overflow-hidden">

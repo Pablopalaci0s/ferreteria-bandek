@@ -60,6 +60,16 @@ return [
             'report' => false,
         ],
 
+        // Google Drive (para las copias off-site de los backups).
+        // El driver 'google' se registra en AppServiceProvider.
+        'google' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+            'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
+        ],
+
     ],
 
     /*

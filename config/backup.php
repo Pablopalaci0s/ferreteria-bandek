@@ -29,4 +29,19 @@ return [
     */
     'binaries_path' => env('DB_DUMP_BINARY_PATH', ''),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Copia externa (off-site)
+    |--------------------------------------------------------------------------
+    | Además de guardar el backup en disco local, se lo sube a un "disco" de
+    | Laravel (ej. 'google' para Google Drive, 's3', etc.). Si queda vacío,
+    | el backup solo se guarda localmente.
+    |
+    |   upload_disk   -> nombre del disco en config/filesystems.php
+    |   upload_folder -> subcarpeta dentro de ese disco
+    */
+    'upload_disk' => env('DB_BACKUP_UPLOAD_DISK', ''),
+
+    'upload_folder' => env('DB_BACKUP_UPLOAD_FOLDER', 'bandek-backups'),
+
 ];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Producto;
 use App\Models\Venta;
+use App\Models\VentaDetalle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -30,6 +31,73 @@ class VentaController extends Controller
     public function create()
     {
         return view('admin.ventas.create');
+    }
+
+    /**
+     * Reporte / cierre de caja: totales de ventas confirmadas en un rango de
+     * fechas (por defecto, hoy), desglose por vendedor y productos más vendidos.
+     */
+    public function reportes(Request $request)
+    {
+        $desde = $request->date('desde')?->startOfDay() ?? now()->startOfDay();
+        $hasta = $request->date('hasta')?->endOfDay() ?? now()->endOfDay();
+
+        $esAdmin = $this->esAdmin($request);
+        $usuarioId = $request->user()->id;
+
+        // Base: ventas confirmadas en el rango, scopeadas por rol.
+        $ventasBase = Venta::query()
+            ->confirmadas()
+            ->whereBetween('confirmada_en', [$desde, $hasta])
+            ->when(! $esAdmin, fn ($q) => $q->where('vendedor_id', $usuarioId));
+
+        $totalVentas = (clone $ventasBase)->sum('total');
+        $cantidadVentas = (clone $ventasBase)->count();
+
+        // Desglose por vendedor (solo tiene sentido para el admin).
+        $ventasPorVendedor = $esAdmin
+            ? (clone $ventasBase)
+                ->select('vendedor_id', DB::raw('COUNT(*) as cantidad'), DB::raw('SUM(total) as importe'))
+                ->groupBy('vendedor_id')
+                ->with('vendedor')
+                ->get()
+            : collect();
+
+        // Productos más vendidos en el rango.
+        $productosMasVendidos = VentaDetalle::query()
+            ->select('producto_nombre', DB::raw('SUM(cantidad) as unidades'), DB::raw('SUM(subtotal) as importe'))
+            ->whereHas('venta', function ($q) use ($desde, $hasta, $esAdmin, $usuarioId) {
+                $q->where('estado', Venta::ESTADO_CONFIRMADA)
+                    ->whereBetween('confirmada_en', [$desde, $hasta])
+                    ->when(! $esAdmin, fn ($sub) => $sub->where('vendedor_id', $usuarioId));
+            })
+            ->groupBy('producto_nombre')
+            ->orderByDesc('unidades')
+            ->take(10)
+            ->get();
+
+        return view('admin.ventas.reportes', [
+            'desde' => $desde,
+            'hasta' => $hasta,
+            'totalVentas' => $totalVentas,
+            'cantidadVentas' => $cantidadVentas,
+            'ventasPorVendedor' => $ventasPorVendedor,
+            'productosMasVendidos' => $productosMasVendidos,
+            'esAdmin' => $esAdmin,
+        ]);
+    }
+
+    /**
+     * Comprobante imprimible de la venta (para guardar como PDF o mandar por
+     * WhatsApp como imagen). Usa una vista independiente, sin el panel.
+     */
+    public function ticket(Request $request, Venta $venta)
+    {
+        $this->autorizarAcceso($request, $venta);
+
+        $venta->load(['detalles', 'vendedor']);
+
+        return view('admin.ventas.ticket', compact('venta'));
     }
 
     /**
@@ -135,8 +203,10 @@ class VentaController extends Controller
     {
         $this->autorizarAcceso($request, $venta);
 
+        $bajoMinimo = [];
+
         try {
-            DB::transaction(function () use ($venta, $request) {
+            DB::transaction(function () use ($venta, $request, &$bajoMinimo) {
                 // Bloquea la fila de la venta: si dos requests intentan
                 // confirmar la misma venta, se serializan aquí.
                 $venta = Venta::whereKey($venta->id)->lockForUpdate()->firstOrFail();
@@ -185,6 +255,11 @@ class VentaController extends Controller
                         $request->user()->id,
                         $venta->id
                     );
+
+                    // Tras descontar, ¿quedó en o por debajo del mínimo?
+                    if ($producto->stock <= $producto->stock_minimo) {
+                        $bajoMinimo[] = "{$producto->nombre} (quedan {$producto->stock})";
+                    }
                 }
 
                 // 3) Marcar confirmada + auditoría.
@@ -198,9 +273,15 @@ class VentaController extends Controller
             return back()->with('error', collect($e->errors())->flatten()->first());
         }
 
-        return redirect()
+        $redirect = redirect()
             ->route('admin.ventas.show', $venta)
             ->with('status', 'Venta confirmada. Se descontó el stock automáticamente.');
+
+        if (! empty($bajoMinimo)) {
+            $redirect->with('alerta_stock', 'Stock bajo tras la venta: '.implode(', ', $bajoMinimo).'.');
+        }
+
+        return $redirect;
     }
 
     public function cancelar(Request $request, Venta $venta)

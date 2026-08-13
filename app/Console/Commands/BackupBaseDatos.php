@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
+use Throwable;
 
 class BackupBaseDatos extends Command
 {
@@ -47,6 +49,7 @@ class BackupBaseDatos extends Command
                 '--routines',
                 '--triggers',
                 '--no-tablespaces',
+                '--set-gtid-purged=OFF', // evita el error GTID_PURGED al restaurar
                 $db['database'],
             ]);
 
@@ -77,7 +80,61 @@ class BackupBaseDatos extends Command
 
         $this->rotarAntiguos($carpeta, $db['database']);
 
+        $this->subirCopiaExterna($destino, $nombre, $db['database']);
+
         return self::SUCCESS;
+    }
+
+    /**
+     * Sube el backup a un disco externo (Google Drive, S3, etc.) si está
+     * configurado, y aplica la misma rotación por días allá. Nunca hace
+     * fallar el comando: el backup local ya está a salvo.
+     */
+    private function subirCopiaExterna(string $rutaLocal, string $nombre, string $database): void
+    {
+        $nombreDisco = trim((string) config('backup.upload_disk'));
+
+        if ($nombreDisco === '') {
+            return;
+        }
+
+        $carpeta = trim(config('backup.upload_folder'), '/');
+        $rutaRemota = ($carpeta === '' ? '' : $carpeta.'/').$nombre;
+
+        try {
+            $stream = fopen($rutaLocal, 'rb');
+            Storage::disk($nombreDisco)->writeStream($rutaRemota, $stream);
+
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
+
+            $this->info("Copia subida a «{$nombreDisco}»: {$rutaRemota}");
+
+            $this->rotarRemotos($nombreDisco, $carpeta, $database);
+        } catch (Throwable $e) {
+            // El backup local sí quedó bien; solo avisamos de la copia externa.
+            $this->warn('No se pudo subir la copia externa: '.$e->getMessage());
+            logger()->warning('Backup off-site falló: '.$e->getMessage());
+        }
+    }
+
+    private function rotarRemotos(string $nombreDisco, string $carpeta, string $database): void
+    {
+        $dias = config('backup.retention_days');
+        $limite = now()->subDays($dias)->getTimestamp();
+
+        $disco = Storage::disk($nombreDisco);
+
+        foreach ($disco->files($carpeta) as $archivo) {
+            if (! str_contains(basename($archivo), $database.'-')) {
+                continue;
+            }
+
+            if ($disco->lastModified($archivo) < $limite) {
+                $disco->delete($archivo);
+            }
+        }
     }
 
     private function crearArchivoCredenciales(array $db): string
