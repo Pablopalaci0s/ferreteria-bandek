@@ -159,11 +159,11 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
 
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-            ¿Tenés un proyecto en mente?
+            ¿Tienes un proyecto en mente?
         </h2>
 
         <p class="text-gray-600 max-w-xl mx-auto mb-8 leading-7">
-            Escribinos y te ayudamos a encontrar exactamente lo que necesitás,
+            Escríbenos y te ayudamos a encontrar exactamente lo que necesitas,
             con asesoría técnica incluida.
         </p>
 

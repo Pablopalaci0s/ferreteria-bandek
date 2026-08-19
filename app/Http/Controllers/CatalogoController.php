@@ -12,9 +12,15 @@ class CatalogoController extends Controller
 {
     public function inicio()
     {
-        $banners = Banner::where('activo', true)
+        $bannersPorZona = Banner::where('activo', true)
             ->orderBy('orden')
-            ->get();
+            ->get()
+            ->groupBy('zona');
+
+        $bannersPrincipal = $bannersPorZona->get('hero_principal', collect());
+        $bannersSecundario = $bannersPorZona->get('hero_secundario', collect());
+        $bannersPromocion = $bannersPorZona->get('promocion', collect());
+        $bannersFranja = $bannersPorZona->get('franja', collect());
 
         $destacados = Producto::with('categoria')
             ->where('activo', true)
@@ -23,9 +29,22 @@ class CatalogoController extends Controller
             ->take(8)
             ->get();
 
-        $categorias = Categoria::where('activo', true)->get();
+        $categorias = Categoria::whereNull('categoria_padre_id')->where('activo', true)->get();
 
-        return view('catalogo.inicio', compact('banners', 'destacados', 'categorias'));
+        $marcas = Marca::where('activo', true)->orderBy('nombre')->get();
+
+        $totalProductos = Producto::where('activo', true)->count();
+
+        return view('catalogo.inicio', compact(
+            'bannersPrincipal',
+            'bannersSecundario',
+            'bannersPromocion',
+            'bannersFranja',
+            'destacados',
+            'categorias',
+            'marcas',
+            'totalProductos'
+        ));
     }
 
     public function index(Request $request)
@@ -176,6 +195,8 @@ class CatalogoController extends Controller
                     'precio_oferta' => $producto->en_oferta
                         ? number_format($producto->precio_oferta, 2)
                         : null,
+
+                    'stock' => $producto->stock,
 
                     'imagen' => $producto->imagen_principal
                         ? asset(

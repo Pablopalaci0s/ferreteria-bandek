@@ -12,31 +12,56 @@ class BannerController extends Controller
 {
     public function index(Request $request)
     {
+        $zona = $request->string('zona')->toString();
+
+        if (! array_key_exists($zona, Banner::ZONAS)) {
+            $zona = array_key_first(Banner::ZONAS);
+        }
+
         $banners = Banner::when($request->filled('buscar'), function ($q) use ($request) {
             $q->where('titulo', 'like', '%'.$request->string('buscar').'%');
         })
+            ->where('zona', $zona)
             ->orderBy('orden')
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.banners.index', compact('banners'));
+        return view('admin.banners.index', [
+            'banners' => $banners,
+            'zona' => $zona,
+            'zonas' => Banner::ZONAS,
+        ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('admin.banners.create');
+        $zona = $request->string('zona')->toString();
+
+        if (! array_key_exists($zona, Banner::ZONAS)) {
+            $zona = array_key_first(Banner::ZONAS);
+        }
+
+        return view('admin.banners.create', ['zonaSeleccionada' => $zona]);
     }
 
     public function store(Request $request)
     {
         $validado = $this->validarDatos($request);
 
-        $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'banners', 1920, 1200, 82);
+        $medidas = Banner::ZONAS[$validado['zona']];
+
+        $validado['imagen'] = ImagenOptimizada::guardar(
+            $request->file('imagen'),
+            'banners',
+            $medidas['ancho'],
+            $medidas['alto'],
+            82
+        );
 
         Banner::create($validado);
 
         return redirect()
-            ->route('admin.banners.index')
+            ->route('admin.banners.index', ['zona' => $validado['zona']])
             ->with('status', 'Banner creado correctamente.');
     }
 
@@ -53,13 +78,21 @@ class BannerController extends Controller
 
             ImagenOptimizada::eliminar($banner->imagen);
 
-            $validado['imagen'] = ImagenOptimizada::guardar($request->file('imagen'), 'banners', 1920, 1200, 82);
+            $medidas = Banner::ZONAS[$validado['zona']];
+
+            $validado['imagen'] = ImagenOptimizada::guardar(
+                $request->file('imagen'),
+                'banners',
+                $medidas['ancho'],
+                $medidas['alto'],
+                82
+            );
         }
 
         $banner->update($validado);
 
         return redirect()
-            ->route('admin.banners.index')
+            ->route('admin.banners.index', ['zona' => $validado['zona']])
             ->with('status', 'Banner actualizado.');
     }
 
@@ -67,10 +100,12 @@ class BannerController extends Controller
     {
         ImagenOptimizada::eliminar($banner->imagen);
 
+        $zona = $banner->zona;
+
         $banner->delete();
 
         return redirect()
-            ->route('admin.banners.index')
+            ->route('admin.banners.index', ['zona' => $zona])
             ->with('status', 'Banner eliminado.');
     }
 
@@ -78,6 +113,7 @@ class BannerController extends Controller
     {
         return $request->validate([
             'titulo' => 'nullable|string|max:150',
+            'zona' => 'required|in:'.implode(',', array_keys(Banner::ZONAS)),
             'link' => 'nullable|string|max:255',
             'orden' => 'nullable|integer|min:0',
             'activo' => 'boolean',

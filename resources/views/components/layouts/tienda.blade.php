@@ -52,30 +52,56 @@
         }
 
         /* =========================================================
+           FOCO DE TECLADO (accesibilidad + consistencia visual)
+        ========================================================= */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid #991b1b;
+            outline-offset: 2px;
+            border-radius: 4px;
+            transition: outline-offset 0.15s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        body.oscuro a:focus-visible,
+        body.oscuro button:focus-visible,
+        body.oscuro input:focus-visible,
+        body.oscuro select:focus-visible,
+        body.oscuro textarea:focus-visible {
+            outline-color: #f87171 !important;
+        }
+
+        /* =========================================================
            TARJETAS Y BOTONES CON RELIEVE
         ========================================================= */
         .bandek-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.35s cubic-bezier(0.32, 0.72, 0, 1);
         }
         .bandek-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 28px rgba(17, 24, 39, 0.12);
+            transform: translateY(-4px);
+            box-shadow: 0 2px 4px rgba(17, 24, 39, 0.04), 0 16px 32px rgba(17, 24, 39, 0.10);
         }
 
         .bandek-btn-cta {
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            transition: transform 0.25s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.10);
         }
         .bandek-btn-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 10px 24px rgba(0, 0, 0, 0.16);
+        }
+        .bandek-btn-cta:active {
+            transform: translateY(0) scale(0.97);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+            transition: transform 0.1s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.1s cubic-bezier(0.32, 0.72, 0, 1);
         }
 
         .bandek-benefit-icon-wrap {
-            width: 2.75rem;
-            height: 2.75rem;
-            border-radius: 9999px;
-            background: rgba(153, 27, 27, 0.08);
+            width: 3rem;
+            height: 3rem;
+            clip-path: polygon(18% 0%, 100% 0%, 100% 82%, 82% 100%, 0% 100%, 0% 18%);
+            background: rgba(153, 27, 27, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -125,7 +151,7 @@
         body.oscuro .bandek-cat-label { color: #e5e7eb !important; }
         body.oscuro .bandek-benefit-icon-wrap { background: rgba(248, 113, 113, 0.15) !important; }
 
-        body.oscuro .bandek-card:hover { box-shadow: 0 16px 28px rgba(0, 0, 0, 0.55) !important; }
+        body.oscuro .bandek-card:hover { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 32px rgba(0, 0, 0, 0.5) !important; }
     </style>
 </head>
 <body
@@ -179,7 +205,7 @@ BARRA SUPERIOR
 HEADER
 ========================================================= --}}
 
-<header class="bg-white border-b">
+<header class="bg-white border-b sticky top-0 z-30 shadow-sm">
 
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -467,13 +493,38 @@ x-for="producto in productos"
 
 
             {{-- =================================================
+                 CARRITO
+            ================================================== --}}
+
+            <button
+                type="button"
+                @click="$store.carrito.abierto = true"
+                class="relative text-gray-600 hover:text-red-800 transition duration-200 ease-emil active:scale-90"
+                aria-label="Ver carrito"
+            >
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.907-4.706 2.325-7.183a1.125 1.125 0 00-1.11-1.317H5.106M7.5 14.25L5.106 5.653M7.5 14.25L5.526 5.653" />
+                </svg>
+
+                <span
+                    x-show="$store.carrito.cantidadTotal > 0"
+                    x-cloak
+                    x-text="$store.carrito.cantidadTotal"
+                    class="absolute -top-2 -right-2 bg-red-700 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center"
+                ></span>
+
+            </button>
+
+
+            {{-- =================================================
                  MODO OSCURO
             ================================================== --}}
 
             <button
                 type="button"
                 @click="oscuro = !oscuro"
-                class="text-gray-600 hover:text-red-800 transition"
+                class="text-gray-600 hover:text-red-800 transition duration-200 ease-emil active:scale-90"
                 aria-label="Cambiar a modo oscuro"
             >
 
@@ -633,7 +684,14 @@ NAVEGACIÓN DE CATEGORÍAS
     .bandek-catnav-list {
         display: flex;
         align-items: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .bandek-catnav-list::-webkit-scrollbar { display: none; }
+    @media (min-width: 1024px) {
+        .bandek-catnav-list { flex-wrap: wrap; overflow-x: visible; }
     }
     .bandek-catnav-lead {
         display: flex;
@@ -646,6 +704,7 @@ NAVEGACIÓN DE CATEGORÍAS
         background: rgba(0,0,0,0.18);
         white-space: nowrap;
         margin-right: 0.25rem;
+        flex-shrink: 0;
     }
     .bandek-catnav-lead:hover {
         background: rgba(0,0,0,0.3);
@@ -782,14 +841,6 @@ FOOTER
                     </a>
                 </li>
 
-                <li>
-                    <a
-                        href="{{ route('login') }}"
-                        class="text-gray-400 hover:text-white transition"
-                    >
-                        Iniciar sesión
-                    </a>
-                </li>
 
             </ul>
 
@@ -1006,9 +1057,15 @@ FOOTER
                 Todos los derechos reservados.
             </p>
 
-            <p>
-                Materiales eléctricos y ferretería
-            </p>
+            <div class="flex items-center gap-4">
+                <span>Materiales eléctricos y ferretería</span>
+                <a href="{{ route('privacidad') }}" class="hover:text-white transition">
+                    Política de privacidad
+                </a>
+                <a href="{{ route('terminos') }}" class="hover:text-white transition">
+                    Términos de servicio
+                </a>
+            </div>
 
         </div>
 
@@ -1018,6 +1075,136 @@ FOOTER
 
 
 </footer>
+
+{{-- =========================================================
+CARRITO (panel lateral)
+========================================================= --}}
+
+<div
+    x-show="$store.carrito.abierto"
+    x-cloak
+    class="fixed inset-0 z-50"
+    x-data="{
+        numero: @js($whatsappNumero),
+        get mensaje() {
+            let lineas = $store.carrito.items.map(
+                (i) => `- ${i.cantidad}x ${i.nombre} — $${(i.precio * i.cantidad).toFixed(2)}`
+            );
+            lineas.push('', 'Total: $' + $store.carrito.total.toFixed(2));
+            return 'Hola, quiero hacer este pedido:\n' + lineas.join('\n');
+        },
+        get enlaceWhatsapp() {
+            return 'https://wa.me/' + this.numero + '?text=' + encodeURIComponent(this.mensaje);
+        },
+    }"
+>
+
+    {{-- Fondo oscuro --}}
+    <div
+        x-show="$store.carrito.abierto"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        @click="$store.carrito.abierto = false"
+        class="absolute inset-0 bg-black/50"
+    ></div>
+
+    {{-- Panel --}}
+    <div
+        x-show="$store.carrito.abierto"
+        x-transition:enter="transition ease-emil duration-300"
+        x-transition:enter-start="translate-x-full"
+        x-transition:enter-end="translate-x-0"
+        x-transition:leave="transition ease-emil duration-200"
+        x-transition:leave-start="translate-x-0"
+        x-transition:leave-end="translate-x-full"
+        class="absolute right-0 top-0 h-full w-full sm:w-96 bg-white shadow-soft-lg flex flex-col"
+    >
+
+        {{-- Encabezado --}}
+        <div class="flex items-center justify-between px-5 py-4 border-b">
+            <h2 class="font-bold text-gray-900 text-lg">Tu pedido</h2>
+            <button type="button" @click="$store.carrito.abierto = false" class="text-gray-400 hover:text-gray-700 transition" aria-label="Cerrar carrito">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        {{-- Vacío --}}
+        <div x-show="$store.carrito.items.length === 0" class="flex-1 flex flex-col items-center justify-center px-6 text-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.907-4.706 2.325-7.183a1.125 1.125 0 00-1.11-1.317H5.106M7.5 14.25L5.106 5.653M7.5 14.25L5.526 5.653" />
+            </svg>
+            <p class="text-gray-500 text-sm">Todavía no agregaste productos.</p>
+            <a href="{{ route('catalogo.index') }}" @click="$store.carrito.abierto = false" class="text-red-800 font-semibold text-sm hover:text-red-900">
+                Ver catálogo →
+            </a>
+        </div>
+
+        {{-- Items --}}
+        <div x-show="$store.carrito.items.length > 0" class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+            <template x-for="item in $store.carrito.items" :key="item.id">
+                <div class="flex gap-3">
+
+                    <div class="w-16 h-16 rounded-md border bg-gray-50 shrink-0 flex items-center justify-center overflow-hidden">
+                        <img :src="item.imagen" :alt="item.nombre" class="w-full h-full object-contain p-1">
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-800 truncate" x-text="item.nombre"></p>
+                        <p class="text-sm font-bold text-red-800 mt-0.5" x-text="'$' + item.precio.toFixed(2)"></p>
+
+                        <div class="flex items-center justify-between mt-2">
+                            <div class="flex items-center border rounded-md">
+                                <button type="button" @click="$store.carrito.actualizarCantidad(item.id, item.cantidad - 1)" class="w-7 h-7 flex items-center justify-center text-gray-600 hover:text-red-800 transition" aria-label="Restar">&minus;</button>
+                                <span class="w-6 text-center text-xs font-medium" x-text="item.cantidad"></span>
+                                <button type="button" @click="$store.carrito.actualizarCantidad(item.id, item.cantidad + 1)" class="w-7 h-7 flex items-center justify-center text-gray-600 hover:text-red-800 transition" aria-label="Sumar">&plus;</button>
+                            </div>
+
+                            <button type="button" @click="$store.carrito.quitar(item.id)" class="text-gray-400 hover:text-red-700 transition" aria-label="Quitar">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </template>
+        </div>
+
+        {{-- Pie: total y enviar --}}
+        <div x-show="$store.carrito.items.length > 0" class="border-t px-5 py-4 space-y-3">
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-600">Total</span>
+                <span class="font-bold text-gray-900 text-lg" x-text="'$' + $store.carrito.total.toFixed(2)"></span>
+            </div>
+
+            <a
+                :href="enlaceWhatsapp"
+                target="_blank"
+                rel="noopener noreferrer"
+                @click="setTimeout(() => { $store.carrito.vaciar(); $store.carrito.abierto = false }, 300)"
+                class="bandek-btn-cta w-full bg-green-500 hover:bg-green-600 text-white font-semibold text-center py-3 rounded-md inline-flex items-center justify-center gap-2"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z" />
+                </svg>
+                Enviar pedido por WhatsApp
+            </a>
+
+            <button type="button" @click="$store.carrito.vaciar()" class="w-full text-center text-xs text-gray-400 hover:text-red-700 transition">
+                Vaciar carrito
+            </button>
+        </div>
+
+    </div>
+
+</div>
 
 {{-- =========================================================
 BOTÓN FLOTANTE WHATSAPP
@@ -1032,7 +1219,8 @@ bg-green-500 hover:bg-green-600
 text-white rounded-full
 w-12 h-12 sm:w-14 sm:h-14
 flex items-center justify-center
-shadow-lg transition"
+shadow-soft-md hover:shadow-soft-lg hover:-translate-y-0.5
+transition duration-300 ease-emil active:scale-90"
 aria-label="Contactar por WhatsApp"
 
 >

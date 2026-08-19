@@ -1,6 +1,6 @@
 <x-layouts.tienda
     :title="'Catálogo — Ferretería BANDEK'"
-    :description="'Explorá todo el catálogo de Ferretería BANDEK: herramientas, materiales eléctricos y más.'"
+    :description="'Explora todo el catálogo de Ferretería BANDEK: herramientas, materiales eléctricos y más.'"
 >
 
 <div
@@ -248,15 +248,38 @@
                             <span class="text-red-700 font-bold" x-text="'$' + producto.precio_oferta"></span>
                         </p>
 
-                        <a
-                            :href="producto.url"
-                            class="bandek-btn-cta mt-auto bg-red-700
-                                   hover:bg-red-800
-                                   text-white text-sm font-semibold
-                                   text-center py-2 rounded-md"
-                        >
-                            Comprar ahora
-                        </a>
+                        <div class="mt-auto flex gap-2">
+
+                            <a
+                                :href="producto.url"
+                                class="bandek-btn-cta flex-1 bg-red-700
+                                       hover:bg-red-800
+                                       text-white text-sm font-semibold
+                                       text-center py-2 rounded-md"
+                            >
+                                Comprar ahora
+                            </a>
+
+                            <button
+                                type="button"
+                                x-show="producto.stock > 0"
+                                @click="$store.carrito.agregar({
+                                    id: producto.id,
+                                    nombre: producto.nombre,
+                                    precio: parseFloat(producto.en_oferta ? producto.precio_oferta : producto.precio),
+                                    imagen: producto.imagen,
+                                    url: producto.url,
+                                })"
+                                class="shrink-0 w-10 flex items-center justify-center border border-gray-300 hover:border-red-800 hover:text-red-800 text-gray-600 rounded-md transition"
+                                aria-label="Agregar al carrito"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.907-4.706 2.325-7.183a1.125 1.125 0 00-1.11-1.317H5.106M7.5 14.25L5.106 5.653M7.5 14.25L5.526 5.653M9 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm9 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v4.5m2.25-2.25h-4.5" />
+                                </svg>
+                            </button>
+
+                        </div>
 
                     </div>
 
@@ -268,35 +291,21 @@
 
 
         {{-- PRODUCTOS NORMALES --}}
-        <template x-if="!buscando">
+        <div x-show="!buscando" class="contents">
 
-            <template>
+            @forelse ($productos as $producto)
 
-                @forelse ($productos as $producto)
+                @include('catalogo._tarjeta-producto', ['producto' => $producto])
 
-                    <div
-                        class="bg-white rounded-lg border
-                               overflow-hidden flex flex-col"
-                    >
+            @empty
 
-                        @include(
-                            'catalogo._tarjeta-producto',
-                            ['producto' => $producto]
-                        )
+                <p class="col-span-full text-gray-500">
+                    No se encontraron productos.
+                </p>
 
-                    </div>
+            @endforelse
 
-                @empty
-
-                    <p class="col-span-full text-gray-500">
-                        No se encontraron productos.
-                    </p>
-
-                @endforelse
-
-            </template>
-
-        </template>
+        </div>
 
 
         {{-- SIN RESULTADOS --}}

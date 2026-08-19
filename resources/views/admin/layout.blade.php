@@ -139,7 +139,7 @@
 
         <a href="{{ route('admin.banners.index') }}"
         class="flex items-center gap-3 px-5 py-2.5 text-sm {{ request()->routeIs('admin.banners.*') ? 'bg-red-800 text-white' : 'hover:bg-gray-800' }}">
-        Banner principal
+        Banners y publicidad
         </a>
 
         @if (auth()->user()->rol === 'admin')

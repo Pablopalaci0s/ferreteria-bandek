@@ -27,7 +27,7 @@ class SubidaImagenTest extends TestCase
         $svg = UploadedFile::fake()->create('malicioso.svg', 5, 'image/svg+xml');
 
         $this->actingAs($admin)
-            ->post(route('admin.banners.store'), ['imagen' => $svg])
+            ->post(route('admin.banners.store'), ['zona' => 'hero_principal', 'imagen' => $svg])
             ->assertSessionHasErrors('imagen');
 
         $this->assertDatabaseCount('banners', 0);
@@ -41,7 +41,7 @@ class SubidaImagenTest extends TestCase
         $gigante = UploadedFile::fake()->image('bomba.jpg', 6001, 10);
 
         $this->actingAs($admin)
-            ->post(route('admin.banners.store'), ['imagen' => $gigante])
+            ->post(route('admin.banners.store'), ['zona' => 'hero_principal', 'imagen' => $gigante])
             ->assertSessionHasErrors('imagen');
 
         $this->assertDatabaseCount('banners', 0);
@@ -54,8 +54,8 @@ class SubidaImagenTest extends TestCase
         $imagen = UploadedFile::fake()->image('foto.jpg', 800, 600);
 
         $this->actingAs($admin)
-            ->post(route('admin.banners.store'), ['imagen' => $imagen])
-            ->assertRedirect(route('admin.banners.index'));
+            ->post(route('admin.banners.store'), ['zona' => 'hero_principal', 'imagen' => $imagen])
+            ->assertRedirect(route('admin.banners.index', ['zona' => 'hero_principal']));
 
         $banner = Banner::first();
         $this->assertNotNull($banner);

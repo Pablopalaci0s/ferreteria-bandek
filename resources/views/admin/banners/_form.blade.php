@@ -1,6 +1,33 @@
 @php
 $b = $banner ?? null;
+$zonaActual = old('zona', $b->zona ?? $zonaSeleccionada ?? array_key_first(\App\Models\Banner::ZONAS));
 @endphp
+
+<div
+    x-data="{ zona: @js($zonaActual), zonas: @js(\App\Models\Banner::ZONAS) }"
+>
+
+<div class="mb-5">
+
+<label class="block text-sm font-medium text-gray-700 mb-1">
+    Dónde se muestra
+</label>
+
+<select
+    name="zona"
+    x-model="zona"
+    class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700"
+>
+    @foreach (\App\Models\Banner::ZONAS as $clave => $datos)
+        <option value="{{ $clave }}" @selected($zonaActual === $clave)>{{ $datos['etiqueta'] }}</option>
+    @endforeach
+</select>
+
+@error('zona')
+    <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+@enderror
+
+</div>
 
 <div class="mb-5">
 
@@ -49,7 +76,7 @@ $b = $banner ?? null;
 <div class="mb-5">
 
 <label class="block text-sm font-medium text-gray-700 mb-1">
-    Imagen {{ $b ? '' : '' }}
+    Imagen
 </label>
 
 <input
@@ -60,9 +87,9 @@ $b = $banner ?? null;
     {{ $b ? '' : 'required' }}
 >
 
-<p class="text-xs text-gray-400 mt-1">
-    Recomendado: imagen panorámica de al menos 1600×600px (relación aproximada 21:7). La imagen se muestra completa, sin recortar, así que entre más se acerque a esa proporción, mejor se va a ver. Máx. 4 MB.
-</p>
+<p class="text-xs font-medium text-red-800 mt-1.5" x-text="'Tamaño recomendado: ' + zonas[zona].ancho + '×' + zonas[zona].alto + 'px'"></p>
+<p class="text-xs text-gray-400 mt-0.5" x-text="zonas[zona].ayuda"></p>
+<p class="text-xs text-gray-400 mt-0.5">La imagen no se recorta: si subís otra proporción, se ajusta completa dentro de ese tamaño. Máx. 5 MB.</p>
 
 @error('imagen')
     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -95,7 +122,7 @@ $b = $banner ?? null;
 >
 
 <p class="text-xs text-gray-400 mt-1">
-    Los banners se muestran de menor a mayor orden.
+    Entre varios banners de la misma zona, se muestran de menor a mayor orden.
 </p>
 
 </div>
@@ -109,5 +136,7 @@ $b = $banner ?? null;
         class="rounded border-gray-300 text-red-800 focus:ring-red-700"
         @checked(old('activo', $b->activo ?? true))
     >
-    Activo (visible en la página principal)
+    Activo (visible en el sitio)
 </label>
+
+</div>

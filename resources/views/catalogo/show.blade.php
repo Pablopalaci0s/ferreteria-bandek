@@ -223,6 +223,15 @@ $unidadAbrev = $producto->unidadMedida->abreviatura ?? null;
                             const mensaje = 'Hola, quiero pedir: ' + this.cantidad + 'x ' + this.nombre + ' - $' + total;
                             return 'https://wa.me/' + this.numero + '?text=' + encodeURIComponent(mensaje);
                         },
+                        agregarAlCarrito() {
+                            $store.carrito.agregar({
+                                id: {{ $producto->id }},
+                                nombre: this.nombre,
+                                precio: this.precio,
+                                imagen: @js($imagenPrincipal),
+                                url: @js(route('catalogo.show', $producto)),
+                            }, this.cantidad);
+                        },
                     }"
                 >
 
@@ -235,6 +244,17 @@ $unidadAbrev = $producto->unidadMedida->abreviatura ?? null;
                             &plus;
                         </button>
                     </div>
+
+                    <button
+                        type="button"
+                        @click="agregarAlCarrito()"
+                        class="bandek-btn-cta bg-white hover:bg-gray-50 text-gray-800 font-semibold text-center py-3 px-6 rounded-lg border border-gray-300 inline-flex items-center gap-2"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.907-4.706 2.325-7.183a1.125 1.125 0 00-1.11-1.317H5.106M7.5 14.25L5.106 5.653M7.5 14.25L5.526 5.653" />
+                        </svg>
+                        Agregar al carrito
+                    </button>
 
                     <a
                         :href="enlaceWhatsapp"
