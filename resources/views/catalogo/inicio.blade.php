@@ -297,67 +297,71 @@
          VENTAJAS
     ========================================================= --}}
 
-    <section class="max-w-7xl mx-auto px-4 pt-12 sm:pt-16">
+    <section
+        class="bg-gray-900 mt-12 sm:mt-16"
+        style="background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 13px);"
+    >
+        <div class="max-w-7xl mx-auto px-4 py-10 sm:py-12">
 
-        <p class="flex items-center gap-2 text-red-800 font-bold text-xs uppercase tracking-widest mb-2">
-            <span class="inline-block w-5 h-[3px] bg-red-800 -skew-x-12"></span>
-            Por qué elegirnos
-        </p>
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
-            Ventajas de comprar en BANDEK
-        </h2>
+            <p class="flex items-center gap-2 text-red-400 font-bold text-xs uppercase tracking-widest mb-2">
+                <span class="inline-block w-5 h-[3px] bg-red-400 -skew-x-12"></span>
+                Por qué elegirnos
+            </p>
+            <h2 class="text-xl sm:text-2xl font-bold text-white mb-8 sm:mb-10">
+                Ventajas de comprar en BANDEK
+            </h2>
 
-        <div class="bandek-benefits-row">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y divide-gray-800 sm:divide-y-0 sm:divide-x sm:divide-gray-800">
 
-            <div class="bandek-benefit">
-                <span class="bandek-benefit-icon-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h11v8H3zM14 10h4l3 3v2h-7z" />
-                        <circle cx="6.5" cy="18.5" r="1.5" />
-                        <circle cx="17.5" cy="18.5" r="1.5" />
-                    </svg>
-                </span>
-                <div>
-                    <p class="bandek-benefit-title">Envío a domicilio</p>
-                    <p class="bandek-benefit-text">Coordinalo con nosotros por WhatsApp</p>
+                <div class="bandek-ventaja sm:pr-6">
+                    <span class="bandek-ventaja-icon-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bandek-ventaja-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z" />
+                        </svg>
+                    </span>
+                    <div>
+                        <p class="bandek-ventaja-title">Pedís por WhatsApp</p>
+                        <p class="bandek-ventaja-text">Sin registrarte ni bajar apps: nos escribís y coordinamos todo ahí.</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="bandek-benefit">
-                <span class="bandek-benefit-icon-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z" />
-                    </svg>
-                </span>
-                <div>
-                    <p class="bandek-benefit-title">Atención inmediata</p>
-                    <p class="bandek-benefit-text">Respuesta rápida por WhatsApp</p>
+                <div class="bandek-ventaja sm:px-6">
+                    <span class="bandek-ventaja-icon-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bandek-ventaja-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                            <circle cx="12" cy="11" r="2.5" />
+                        </svg>
+                    </span>
+                    <div>
+                        <p class="bandek-ventaja-title">Retiro o envío</p>
+                        <p class="bandek-ventaja-text">Pasás a la tienda en San Salvador o lo coordinamos a domicilio.</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="bandek-benefit">
-                <span class="bandek-benefit-icon-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
-                        <circle cx="12" cy="11" r="2.5" />
-                    </svg>
-                </span>
-                <div>
-                    <p class="bandek-benefit-title">Retiro en tienda</p>
-                    <p class="bandek-benefit-text">Recoge tu pedido cuando quieras</p>
+                <div class="bandek-ventaja sm:px-6">
+                    <span class="bandek-ventaja-icon-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bandek-ventaja-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.775-3.775a6 6 0 01-7.936 7.936l-6.545 6.545a2.121 2.121 0 01-3-3l6.546-6.546a6 6 0 017.936-7.937l-3.767 3.768z" />
+                        </svg>
+                    </span>
+                    <div>
+                        <p class="bandek-ventaja-title">Te asesoramos</p>
+                        <p class="bandek-ventaja-text">Contanos tu proyecto y te decimos qué materiales necesitás.</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="bandek-benefit">
-                <span class="bandek-benefit-icon-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="bandek-benefit-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.775-3.775a6 6 0 01-7.936 7.936l-6.545 6.545a2.121 2.121 0 01-3-3l6.546-6.546a6 6 0 017.936-7.937l-3.767 3.768z" />
-                    </svg>
-                </span>
-                <div>
-                    <p class="bandek-benefit-title">Asesoría técnica</p>
-                    <p class="bandek-benefit-text">Te ayudamos a elegir el producto correcto</p>
+                <div class="bandek-ventaja sm:pl-6">
+                    <span class="bandek-ventaja-icon-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bandek-ventaja-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                    <div>
+                        <p class="bandek-ventaja-title">Horario amplio</p>
+                        <p class="bandek-ventaja-text">Lunes a sábado, de 8:00 a.m. a 5:00 p.m.</p>
+                    </div>
                 </div>
+
             </div>
 
         </div>
@@ -365,50 +369,43 @@
     </section>
 
     <style>
-        .bandek-benefits-row {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
+        .bandek-ventaja {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
         }
-        @media (min-width: 768px) {
-            .bandek-benefits-row {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-            }
+        @media (min-width: 640px) {
+            .bandek-ventaja { padding-top: 0; padding-bottom: 0; }
         }
-        .bandek-benefit {
+        .bandek-ventaja-icon-wrap {
+            width: 2.75rem;
+            height: 2.75rem;
+            clip-path: polygon(18% 0%, 100% 0%, 100% 82%, 82% 100%, 0% 100%, 0% 18%);
+            background: rgba(248, 113, 113, 0.14);
             display: flex;
             align-items: center;
-            gap: 0.85rem;
-            background: #fff;
-            border: 1px solid #eef0f2;
-            border-top: 3px solid transparent;
-            border-radius: 0.5rem;
-            padding: 1.1rem 1rem;
-            box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
-            transition: border-color 0.25s cubic-bezier(0.32, 0.72, 0, 1), transform 0.25s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.25s cubic-bezier(0.32, 0.72, 0, 1);
-        }
-        .bandek-benefit:hover {
-            border-top-color: #991b1b;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 22px rgba(17, 24, 39, 0.09);
-        }
-        .bandek-benefit-icon {
-            width: 1.75rem;
-            height: 1.75rem;
-            color: #991b1b;
+            justify-content: center;
             flex-shrink: 0;
         }
-        .bandek-benefit-title {
-            font-weight: 700;
-            font-size: 0.875rem;
-            color: #991b1b;
-            line-height: 1.2;
-            margin-bottom: 0.15rem;
+        .bandek-ventaja-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: #f87171;
+            flex-shrink: 0;
         }
-        .bandek-benefit-text {
-            font-size: 0.75rem;
-            color: #4b5563;
-            line-height: 1.3;
+        .bandek-ventaja-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #fff;
+            line-height: 1.25;
+            margin-bottom: 0.2rem;
+        }
+        .bandek-ventaja-text {
+            font-size: 0.8125rem;
+            color: #9ca3af;
+            line-height: 1.4;
         }
     </style>
 

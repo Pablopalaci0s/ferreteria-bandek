@@ -46,7 +46,7 @@
         /* =========================================================
            TIPOGRAFÍA DE MARCA
         ========================================================= */
-        h1, h2, .bandek-cat-label, .bandek-benefit-title {
+        h1, h2, .bandek-cat-label, .bandek-ventaja-title {
             font-family: 'Oswald', sans-serif;
             letter-spacing: 0.01em;
         }
@@ -97,17 +97,6 @@
             transition: transform 0.1s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.1s cubic-bezier(0.32, 0.72, 0, 1);
         }
 
-        .bandek-benefit-icon-wrap {
-            width: 3rem;
-            height: 3rem;
-            clip-path: polygon(18% 0%, 100% 0%, 100% 82%, 82% 100%, 0% 100%, 0% 18%);
-            background: rgba(153, 27, 27, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
         /* =========================================================
            MODO OSCURO
         ========================================================= */
@@ -146,10 +135,8 @@
 
         body.oscuro .hover\:bg-gray-50:hover { background-color: #374151 !important; }
 
-        body.oscuro .bandek-benefit { background: #1f2937 !important; border-color: #374151 !important; }
         body.oscuro .bandek-cat-circle { background: #1f2937 !important; border-color: #374151 !important; }
         body.oscuro .bandek-cat-label { color: #e5e7eb !important; }
-        body.oscuro .bandek-benefit-icon-wrap { background: rgba(248, 113, 113, 0.15) !important; }
 
         body.oscuro .bandek-card:hover { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 32px rgba(0, 0, 0, 0.5) !important; }
     </style>
