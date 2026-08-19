@@ -37,6 +37,9 @@
                             @if ($usuario->id === auth()->id())
                                 <span class="text-xs text-gray-400">(vos)</span>
                             @endif
+                            @if ($usuario->must_change_password)
+                                <span class="ml-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Contraseña temporal pendiente</span>
+                            @endif
                         </td>
                         <td class="p-3 text-gray-500">{{ $usuario->email }}</td>
                         <td class="p-3">
@@ -47,6 +50,10 @@
                         <td class="p-3 text-gray-500">{{ $usuario->created_at->format('d/m/Y') }}</td>
                         <td class="p-3 text-right space-x-2">
                             <a href="{{ route('admin.usuarios.edit', $usuario) }}" class="text-red-800 hover:underline">Editar</a>
+                            <form action="{{ route('admin.usuarios.reset-password', $usuario) }}" method="POST" class="inline" onsubmit="return confirm('¿Generar una contraseña temporal para {{ $usuario->name }} y enviarla por correo?');">
+                                @csrf
+                                <button type="submit" class="text-gray-500 hover:text-red-800 hover:underline">Restablecer contraseña</button>
+                            </form>
                             @if ($usuario->id !== auth()->id())
                                 <form action="{{ route('admin.usuarios.destroy', $usuario) }}" method="POST" class="inline" onsubmit="return confirm('¿Eliminar a {{ $usuario->name }}?');">
                                     @csrf

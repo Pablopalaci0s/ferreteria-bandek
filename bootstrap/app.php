@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\CabecerasSeguridad;
 use App\Http\Middleware\EsAdmin;
+use App\Http\Middleware\ObligarCambioPassword;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => EsAdmin::class,
+            'obligar.password' => ObligarCambioPassword::class,
         ]);
 
         $middleware->web(append: [

@@ -30,6 +30,18 @@ class SitemapController extends Controller
             'priority' => '0.5',
         ];
 
+        $urls[] = [
+            'loc' => route('privacidad'),
+            'lastmod' => now()->toAtomString(),
+            'priority' => '0.3',
+        ];
+
+        $urls[] = [
+            'loc' => route('terminos'),
+            'lastmod' => now()->toAtomString(),
+            'priority' => '0.3',
+        ];
+
         foreach (Categoria::where('activo', true)->get() as $categoria) {
             $urls[] = [
                 'loc' => route('catalogo.index', ['categoria' => $categoria->slug]),

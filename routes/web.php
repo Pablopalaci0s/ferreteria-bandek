@@ -34,6 +34,12 @@ Route::get('/producto/{producto}', [CatalogoController::class, 'show'])
 Route::view('/nosotros', 'nosotros')
     ->name('nosotros');
 
+Route::view('/privacidad', 'privacidad')
+    ->name('privacidad');
+
+Route::view('/terminos', 'terminos')
+    ->name('terminos');
+
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])
     ->name('sitemap');
 
@@ -41,7 +47,7 @@ Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'obligar.password'])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
@@ -227,6 +233,11 @@ Route::middleware('auth')->group(function () {
                 UsuarioController::class,
                 'destroy',
             ])->name('usuarios.destroy');
+
+            Route::post('usuarios/{usuario}/reset-password', [
+                UsuarioController::class,
+                'resetPassword',
+            ])->name('usuarios.reset-password');
         });
     });
 });

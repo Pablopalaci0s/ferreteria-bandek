@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ContrasenaTemporal;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
@@ -87,6 +90,21 @@ class UsuarioController extends Controller
 
         return redirect()->route('admin.usuarios.index')
             ->with('status', 'Usuario actualizado correctamente.');
+    }
+
+    public function resetPassword(User $usuario)
+    {
+        $temporal = Str::password(12);
+
+        $usuario->update([
+            'password' => Hash::make($temporal),
+            'must_change_password' => true,
+        ]);
+
+        Mail::to($usuario->email)->send(new ContrasenaTemporal($usuario, $temporal));
+
+        return redirect()->route('admin.usuarios.index')
+            ->with('status', "Se generó una contraseña temporal y se envió por correo a {$usuario->email}.");
     }
 
     public function destroy(Request $request, User $usuario)
