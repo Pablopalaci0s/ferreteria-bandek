@@ -97,6 +97,13 @@ class ImagenOptimizada
         ?int $thumbnail
     ): string {
 
+        // GD decodifica la imagen entera en memoria (varias veces: original,
+        // reescalada, y otra vez para el thumbnail). Con fotos grandes de
+        // celular esto puede superar el memory_limit por defecto (128M) y
+        // tirar el proceso sin excepción capturable, así que lo subimos acá
+        // en vez de depender de la config del servidor.
+        self::asegurarMemoriaSuficiente();
+
         $rutaTemporal = $archivo->getRealPath();
         $info = @getimagesize($rutaTemporal);
 
@@ -216,6 +223,41 @@ class ImagenOptimizada
         }
 
         imagedestroy($destino);
+    }
+
+    /**
+     * Sube el memory_limit a al menos 256M para este request si el
+     * configurado es menor (o ilimitado, valor -1, se deja como está).
+     */
+    private static function asegurarMemoriaSuficiente(): void
+    {
+        $minimo = 256 * 1024 * 1024;
+        $actual = self::bytesDesdeIni(ini_get('memory_limit'));
+
+        if ($actual !== -1 && $actual < $minimo) {
+            @ini_set('memory_limit', (string) $minimo);
+        }
+    }
+
+    private static function bytesDesdeIni(string|false $valor): int
+    {
+        if ($valor === false || $valor === '') {
+            return 0;
+        }
+
+        if ($valor === '-1') {
+            return -1;
+        }
+
+        $numero = (int) $valor;
+        $unidad = strtolower(substr(trim($valor), -1));
+
+        return match ($unidad) {
+            'g' => $numero * 1024 * 1024 * 1024,
+            'm' => $numero * 1024 * 1024,
+            'k' => $numero * 1024,
+            default => $numero,
+        };
     }
 
     private static function extensionSalida(): string
