@@ -29,6 +29,27 @@ class ResetPasswordUsuarioTest extends TestCase
         Mail::assertSent(ContrasenaTemporal::class, fn ($mail) => $mail->usuario->is($usuario));
     }
 
+    public function test_si_falla_el_envio_de_correo_muestra_la_contrasena_temporal(): void
+    {
+        // Ej. el dominio de envio de Resend todavia no esta verificado y
+        // solo deja mandar a la cuenta dueña de la API key: la contraseña
+        // ya quedo cambiada, y el admin necesita ver cual es para pasarla
+        // a mano en vez de recibir un 500 sin ninguna info.
+        Mail::shouldReceive('to')->once()->andReturnSelf();
+        Mail::shouldReceive('send')->once()->andThrow(new \Exception('Resend rechazó el envío'));
+
+        $admin = User::factory()->admin()->create();
+        $usuario = User::factory()->vendedor()->create();
+
+        $respuesta = $this->actingAs($admin)
+            ->post(route('admin.usuarios.reset-password', $usuario));
+
+        $respuesta->assertRedirect(route('admin.usuarios.index'));
+        $respuesta->assertSessionHas('error');
+
+        $this->assertTrue($usuario->refresh()->must_change_password);
+    }
+
     public function test_un_vendedor_no_puede_resetear_contrasenas(): void
     {
         Mail::fake();

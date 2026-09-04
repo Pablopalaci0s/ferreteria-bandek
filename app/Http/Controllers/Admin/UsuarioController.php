@@ -101,7 +101,19 @@ class UsuarioController extends Controller
             'must_change_password' => true,
         ]);
 
-        Mail::to($usuario->email)->send(new ContrasenaTemporal($usuario, $temporal));
+        // La contraseña YA quedó cambiada arriba: si el correo falla (ej. el
+        // dominio de envío de Resend todavía no está verificado y solo deja
+        // mandar a la cuenta dueña de la API key), no dejamos al admin sin
+        // saber la contraseña que se generó — se la mostramos para que la
+        // pueda pasar a mano.
+        try {
+            Mail::to($usuario->email)->send(new ContrasenaTemporal($usuario, $temporal));
+        } catch (\Throwable $e) {
+            report($e);
+
+            return redirect()->route('admin.usuarios.index')
+                ->with('error', "Se generó la contraseña temporal para {$usuario->email}, pero no se pudo enviar el correo (revisá la configuración de Resend). Contraseña temporal: {$temporal}");
+        }
 
         return redirect()->route('admin.usuarios.index')
             ->with('status', "Se generó una contraseña temporal y se envió por correo a {$usuario->email}.");
