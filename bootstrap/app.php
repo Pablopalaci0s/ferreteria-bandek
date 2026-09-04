@@ -23,6 +23,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             CabecerasSeguridad::class,
         ]);
+
+        // Detrás de un proxy/load balancer (Render, Cloudflare, etc.) que
+        // termina el HTTPS y reenvía por HTTP interno: sin esto, Laravel
+        // no sabe que el pedido original fue por HTTPS y genera URLs de
+        // assets/enlaces con http:// (el navegador las bloquea por
+        // "mixed content"). No hay una lista fija de IPs de estos
+        // proveedores, así que se confía en cualquier proxy (estándar
+        // para este tipo de hosting).
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
