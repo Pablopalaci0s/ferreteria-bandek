@@ -9,15 +9,16 @@ class RestaurarBaseDatos extends Command
 {
     protected $signature = 'db:restore {archivo? : Nombre del archivo .sql.gz dentro de la carpeta de backups} {--force : No pedir confirmación}';
 
-    protected $description = 'Restaura la base de datos desde un backup .sql.gz. SOBRESCRIBE los datos actuales.';
+    protected $description = 'Restaura la base de datos (MySQL o PostgreSQL) desde un backup .sql.gz. SOBRESCRIBE los datos actuales.';
 
     public function handle(): int
     {
         $conexion = config('database.default');
         $db = config("database.connections.{$conexion}");
+        $driver = $db['driver'] ?? null;
 
-        if (($db['driver'] ?? null) !== 'mysql') {
-            $this->error("La restauración solo está preparada para MySQL (conexión actual: {$conexion}).");
+        if (! in_array($driver, ['mysql', 'pgsql'], true)) {
+            $this->error("La restauración solo está preparada para MySQL o PostgreSQL (conexión actual: {$conexion}).");
 
             return self::FAILURE;
         }
@@ -47,14 +48,14 @@ class RestaurarBaseDatos extends Command
             return self::SUCCESS;
         }
 
-        $cnf = $this->crearArchivoCredenciales($db);
+        $credenciales = $driver === 'mysql'
+            ? $this->crearArchivoCredencialesMysql($db)
+            : $this->crearArchivoCredencialesPgsql($db);
 
         try {
-            $process = new Process([
-                $this->binario('mysql'),
-                '--defaults-extra-file='.$cnf,
-                $db['database'],
-            ]);
+            $process = $driver === 'mysql'
+                ? $this->procesoRestoreMysql($db, $credenciales)
+                : $this->procesoRestorePgsql($db, $credenciales);
             $process->setTimeout(600);
 
             // Descomprimimos el .gz y lo enviamos por la entrada estándar de mysql.
@@ -69,7 +70,7 @@ class RestaurarBaseDatos extends Command
                 return self::FAILURE;
             }
         } finally {
-            @unlink($cnf);
+            @unlink($credenciales);
         }
 
         $this->info("Base «{$db['database']}» restaurada desde {$archivo}.");
@@ -109,7 +110,35 @@ class RestaurarBaseDatos extends Command
         }
     }
 
-    private function crearArchivoCredenciales(array $db): string
+    private function procesoRestoreMysql(array $db, string $cnf): Process
+    {
+        return new Process([
+            $this->binario('mysql'),
+            '--defaults-extra-file='.$cnf,
+            $db['database'],
+        ]);
+    }
+
+    private function procesoRestorePgsql(array $db, string $pgpass): Process
+    {
+        return new Process(
+            command: [
+                $this->binario('psql'),
+                '--host='.$db['host'],
+                '--port='.$db['port'],
+                '--username='.$db['username'],
+                '--no-password',
+                '--quiet',
+                $db['database'],
+            ],
+            env: [
+                'PGSSLMODE' => $db['sslmode'] ?? 'require',
+                'PGPASSFILE' => $pgpass,
+            ],
+        );
+    }
+
+    private function crearArchivoCredencialesMysql(array $db): string
     {
         $cnf = tempnam(sys_get_temp_dir(), 'rst');
         chmod($cnf, 0600);
@@ -124,6 +153,19 @@ class RestaurarBaseDatos extends Command
         );
 
         return $cnf;
+    }
+
+    private function crearArchivoCredencialesPgsql(array $db): string
+    {
+        $pgpass = tempnam(sys_get_temp_dir(), 'rst');
+        chmod($pgpass, 0600);
+
+        file_put_contents(
+            $pgpass,
+            "{$db['host']}:{$db['port']}:{$db['database']}:{$db['username']}:{$db['password']}\n"
+        );
+
+        return $pgpass;
     }
 
     private function binario(string $nombre): string

@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SolicitudPrecioController;
 use App\Http\Controllers\Admin\UsuarioController;
 use App\Http\Controllers\Admin\VentaController;
 use App\Http\Controllers\CatalogoController;
+use App\Http\Controllers\CronController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,12 @@ Route::view('/terminos', 'terminos')
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])
     ->name('sitemap');
+
+// Backup diario disparado por un cron externo (ver DEPLOY-CLOUD.md). Solo
+// hace algo si CRON_SECRET está configurado y coincide con la cabecera.
+Route::get('/cron/backup', [CronController::class, 'backup'])
+    ->middleware('throttle:10,1')
+    ->name('cron.backup');
 
 Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');

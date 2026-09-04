@@ -11,15 +11,16 @@ class BackupBaseDatos extends Command
 {
     protected $signature = 'db:backup';
 
-    protected $description = 'Genera un backup comprimido de la base de datos MySQL y rota los antiguos.';
+    protected $description = 'Genera un backup comprimido de la base de datos (MySQL o PostgreSQL) y rota los antiguos.';
 
     public function handle(): int
     {
         $conexion = config('database.default');
         $db = config("database.connections.{$conexion}");
+        $driver = $db['driver'] ?? null;
 
-        if (($db['driver'] ?? null) !== 'mysql') {
-            $this->error("El backup solo está preparado para MySQL (conexión actual: {$conexion}).");
+        if (! in_array($driver, ['mysql', 'pgsql'], true)) {
+            $this->error("El backup solo está preparado para MySQL o PostgreSQL (conexión actual: {$conexion}).");
 
             return self::FAILURE;
         }
@@ -35,23 +36,17 @@ class BackupBaseDatos extends Command
 
         // Credenciales en un archivo temporal (modo 600) para que NO aparezcan
         // en la lista de procesos ni en los logs.
-        $cnf = $this->crearArchivoCredenciales($db);
+        $credenciales = $driver === 'mysql'
+            ? $this->crearArchivoCredencialesMysql($db)
+            : $this->crearArchivoCredencialesPgsql($db);
 
         $gz = gzopen($destino, 'wb9');
         $errores = '';
 
         try {
-            $process = new Process([
-                $this->binario('mysqldump'),
-                '--defaults-extra-file='.$cnf,
-                '--single-transaction',  // consistente sin bloquear tablas InnoDB
-                '--quick',
-                '--routines',
-                '--triggers',
-                '--no-tablespaces',
-                '--set-gtid-purged=OFF', // evita el error GTID_PURGED al restaurar
-                $db['database'],
-            ]);
+            $process = $driver === 'mysql'
+                ? $this->procesoDumpMysql($db, $credenciales)
+                : $this->procesoDumpPgsql($db, $credenciales);
 
             $process->setTimeout(600);
 
@@ -67,12 +62,13 @@ class BackupBaseDatos extends Command
 
             if (! $process->isSuccessful()) {
                 @unlink($destino);
-                $this->error('Falló mysqldump: '.trim($errores ?: $process->getErrorOutput()));
+                $herramienta = $driver === 'mysql' ? 'mysqldump' : 'pg_dump';
+                $this->error("Falló {$herramienta}: ".trim($errores ?: $process->getErrorOutput()));
 
                 return self::FAILURE;
             }
         } finally {
-            @unlink($cnf);
+            @unlink($credenciales);
         }
 
         $tamano = $this->formatearTamano(filesize($destino));
@@ -137,7 +133,44 @@ class BackupBaseDatos extends Command
         }
     }
 
-    private function crearArchivoCredenciales(array $db): string
+    private function procesoDumpMysql(array $db, string $cnf): Process
+    {
+        return new Process([
+            $this->binario('mysqldump'),
+            '--defaults-extra-file='.$cnf,
+            '--single-transaction',  // consistente sin bloquear tablas InnoDB
+            '--quick',
+            '--routines',
+            '--triggers',
+            '--no-tablespaces',
+            '--set-gtid-purged=OFF', // evita el error GTID_PURGED al restaurar
+            $db['database'],
+        ]);
+    }
+
+    private function procesoDumpPgsql(array $db, string $pgpass): Process
+    {
+        return new Process(
+            command: [
+                $this->binario('pg_dump'),
+                '--host='.$db['host'],
+                '--port='.$db['port'],
+                '--username='.$db['username'],
+                '--no-password',
+                '--format=plain',
+                '--no-owner',
+                '--no-privileges',
+                $db['database'],
+            ],
+            env: [
+                // Neon/Supabase exigen SSL; PGSSLMODE lo fuerza sin tocar el comando.
+                'PGSSLMODE' => $db['sslmode'] ?? 'require',
+                'PGPASSFILE' => $pgpass,
+            ],
+        );
+    }
+
+    private function crearArchivoCredencialesMysql(array $db): string
     {
         $cnf = tempnam(sys_get_temp_dir(), 'bkp');
         chmod($cnf, 0600);
@@ -151,6 +184,24 @@ class BackupBaseDatos extends Command
         file_put_contents($cnf, $contenido);
 
         return $cnf;
+    }
+
+    /**
+     * Archivo .pgpass temporal (formato: host:port:database:username:password),
+     * la forma estándar de pasarle la contraseña a pg_dump/psql sin que quede
+     * expuesta en la lista de procesos.
+     */
+    private function crearArchivoCredencialesPgsql(array $db): string
+    {
+        $pgpass = tempnam(sys_get_temp_dir(), 'bkp');
+        chmod($pgpass, 0600);
+
+        file_put_contents(
+            $pgpass,
+            "{$db['host']}:{$db['port']}:{$db['database']}:{$db['username']}:{$db['password']}\n"
+        );
+
+        return $pgpass;
     }
 
     private function binario(string $nombre): string

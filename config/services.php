@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    // Secreto para /cron/backup — ver routes/web.php. Solo hace falta en
+    // hostings sin cron real (ej. Render free tier); ver DEPLOY-CLOUD.md.
+    'cron' => [
+        'secret' => env('CRON_SECRET'),
+    ],
+
 ];
