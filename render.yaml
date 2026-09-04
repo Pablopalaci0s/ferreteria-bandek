@@ -73,7 +73,7 @@ services:
       - key: QUEUE_CONNECTION
         value: database
 
-      # Imágenes: Cloudflare R2 (S3-compatible).
+      # Imágenes: Supabase Storage (S3-compatible).
       - key: FILESYSTEM_DISK_PUBLIC
         value: s3
       - key: AWS_ACCESS_KEY_ID
@@ -81,7 +81,7 @@ services:
       - key: AWS_SECRET_ACCESS_KEY
         sync: false
       - key: AWS_DEFAULT_REGION
-        value: auto
+        sync: false
       - key: AWS_BUCKET
         sync: false
       - key: AWS_ENDPOINT

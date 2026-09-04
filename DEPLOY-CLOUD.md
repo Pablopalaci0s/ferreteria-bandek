@@ -1,4 +1,4 @@
-# Desplegar BANDEK 100% gratis (Render + Neon + Cloudflare R2)
+# Desplegar BANDEK 100% gratis (Render + Neon + Supabase Storage)
 
 Guía para poner el sitio en línea sin pagar nada, usando capas gratuitas:
 
@@ -6,18 +6,22 @@ Guía para poner el sitio en línea sin pagar nada, usando capas gratuitas:
 |---|---|---|
 | Servidor (PHP) | **Render** (Docker, plan Free) | Soporta cualquier lenguaje vía Docker; 750h/mes gratis (alcanza para 1 servicio corriendo todo el mes) |
 | Base de datos | **Neon** (Postgres) | Free forever, sin tarjeta. Se "duerme" sola tras 5 min sin uso y despierta sola en la siguiente consulta (~300ms) — no hace falta entrar a reactivarla a mano |
-| Imágenes | **Cloudflare R2** (S3-compatible) | Render free NO tiene disco persistente: las imágenes subidas se perderían en cada reinicio si se guardan en el propio contenedor. R2 da 10GB gratis y sin costo de salida (egress) |
+| Imágenes | **Supabase Storage** (S3-compatible) | Render free NO tiene disco persistente: las imágenes subidas se perderían en cada reinicio si se guardan en el propio contenedor. Supabase no pide tarjeta (a diferencia de Cloudflare R2, que sí) |
 | Correo | **Resend** (ya en el proyecto) | Ya configurado; solo falta verificar el dominio |
 | Backups off-site | **Google Drive** (ya en el proyecto) | Gratis, privado, ya implementado — no hace falta otro servicio más |
 | Cron diario | **GitHub Actions** (gratis) | Render free no ofrece cron gratis (mínimo $1/mes); GitHub Actions sí |
 
-⚠️ **Por qué no Supabase para la base de datos**: su plan free *pausa el
-proyecto* tras una semana sin actividad, y reactivarlo requiere entrar al
-dashboard a mano — con el tráfico bajo que va a tener el sitio al
-arrancar, esto pasaría seguido y el sitio quedaría caído hasta que alguien
-lo note. Neon resuelve esto solo, sin intervención. (Podés usar Supabase
-solo si en algún momento preferís su Storage en vez de R2 — la config de
-abajo es igual de válida para cualquier proveedor S3-compatible.)
+⚠️ **Por qué Neon para la base de datos y no Supabase**: el plan free de
+Supabase *pausa el proyecto* tras una semana sin actividad, y reactivarlo
+requiere entrar al dashboard a mano — con el tráfico bajo que va a tener
+el sitio al arrancar, esto pasaría seguido y el sitio quedaría caído hasta
+que alguien lo note. Neon resuelve esto solo, sin intervención.
+
+⚠️ **El mismo problema aplica al Storage de Supabase** que sí vamos a usar
+acá (el bucket también se pausa junto con el proyecto — los archivos no
+se pierden, pero quedan inaccesibles hasta reactivarlo a mano). Como no
+queremos pedirte una tarjeta para R2, lo resolvemos con un ping gratuito
+automático (paso 5) que mantiene el proyecto de Supabase activo.
 
 ## Qué cambió en el código para que esto funcione
 
@@ -69,26 +73,33 @@ nuevas, todo sigue usando disco local y MySQL como hasta ahora.
 4. Guardala — es tu `DB_URL`. Si querés, renombrá la base de `neondb` a
    `bandek_db` desde el dashboard (opcional, cosmético).
 
-## 2. Cloudflare R2 (imágenes)
+## 2. Supabase Storage (imágenes)
 
-1. Creá cuenta en [Cloudflare](https://dash.cloudflare.com) (sin tarjeta
-   para el free tier de R2).
-2. **R2 Object Storage** → **Create bucket** → nombre `bandek-imagenes`.
-3. Adentro del bucket, pestaña **Settings** → **Public Access** → activalo
-   (necesario: las imágenes del catálogo son públicas). Copiá la URL
-   `https://pub-xxxxxxxx.r2.dev` que te da — es tu `AWS_URL`.
-4. **R2 → Manage API Tokens → Create API Token**: permisos *Object Read &
-   Write*, alcance limitado al bucket `bandek-imagenes`. Te da:
+1. Creá cuenta en [supabase.com](https://supabase.com) (sin tarjeta).
+2. **New Project** → nombre `bandek`, elegí una contraseña de base (no la
+   vamos a usar, Supabase la pide igual) y la región más cercana.
+3. **Storage** (menú izquierdo) → **New bucket** → nombre `bandek-imagenes`
+   → activá **Public bucket** (necesario: las imágenes del catálogo son
+   públicas).
+4. **Project Settings → Data API → (sección) Storage → S3 Connection**
+   (o "S3 Access Keys", el nombre exacto varía un poco según la versión
+   del dashboard) → **New access key**. Te da:
    - `Access Key ID` → `AWS_ACCESS_KEY_ID`
    - `Secret Access Key` → `AWS_SECRET_ACCESS_KEY`
-5. El **endpoint** de la cuenta (aparece en la misma pantalla de R2, o en
-   Overview) tiene esta forma:
+   - Un **Endpoint URL** con esta forma → `AWS_ENDPOINT`:
+     ```
+     https://<PROJECT_REF>.supabase.co/storage/v1/s3
+     ```
+5. `AWS_BUCKET=bandek-imagenes`, `AWS_DEFAULT_REGION=us-east-1` (o la
+   región que te haya asignado el dashboard), `AWS_USE_PATH_STYLE_ENDPOINT=true`.
+6. La URL pública de un archivo en el bucket sigue este patrón — es tu
+   `AWS_URL` (reemplazá `<PROJECT_REF>`):
    ```
-   https://<ACCOUNT_ID>.r2.cloudflarestorage.com
+   AWS_URL=https://<PROJECT_REF>.supabase.co/storage/v1/object/public/bandek-imagenes
    ```
-   → es tu `AWS_ENDPOINT`.
-6. `AWS_BUCKET=bandek-imagenes`, `AWS_DEFAULT_REGION=auto`,
-   `AWS_USE_PATH_STYLE_ENDPOINT=true`.
+7. Subí un archivo de texto vacío llamado `keepalive.txt` al bucket
+   (botón **Upload file** en la pantalla del bucket) — lo usa el ping
+   automático del paso 5 más abajo para evitar que el proyecto se pause.
 
 ## 3. Resend (correo) — verificar el dominio
 
@@ -132,7 +143,7 @@ creaste la cuenta de Resend) y cambiarlo después.
 6. Entrá a la URL que te da Render (`https://bandek.onrender.com` o
    similar) y confirmá que carga. Iniciá sesión como admin y subí una
    imagen de prueba a un producto — si aparece y termina en `.webp`,
-   R2 está bien conectado.
+   Supabase Storage está bien conectado.
 
 **Sin Blueprint**: si preferís armarlo a mano en vez de usar render.yaml,
 elegí **New → Web Service → Docker**, apuntá al repo, y cargá las mismas
@@ -154,6 +165,13 @@ variables una por una desde [.env.cloud.example](.env.cloud.example).
    le hace ping al sitio cada 10 min para evitar el cold-start de 30-60s
    tras 15 min sin visitas. Usa el mismo secret `APP_URL`. Borralo si no
    te importa esa demora ocasional.
+4. **Este no es opcional** (evita que las imágenes se pausen): agregá el
+   secret `SUPABASE_STORAGE_URL` = tu `AWS_URL` del paso 2 (por ejemplo
+   `https://xxxx.supabase.co/storage/v1/object/public/bandek-imagenes`).
+   El workflow [.github/workflows/supabase-keep-alive.yml](.github/workflows/supabase-keep-alive.yml)
+   le pega a `keepalive.txt` cada 3 días — bien por debajo de la semana de
+   inactividad que dispara la pausa. Probalo a mano una vez: **Actions →
+   Supabase keep-alive → Run workflow**.
 
 ## 6. Verificación final
 
@@ -161,9 +179,11 @@ variables una por una desde [.env.cloud.example](.env.cloud.example).
 - [ ] `APP_DEBUG=false` — probá una URL rota y confirmá que NO se ve una
       traza de error de Laravel.
 - [ ] Subir una imagen de producto/banner y que quede en `.webp` (confirma
-      R2).
+      Supabase Storage).
 - [ ] **Actions → Backup diario → Run workflow** a mano una vez, y
       confirmá en Google Drive que apareció el archivo `.sql.gz`.
+- [ ] **Actions → Supabase keep-alive → Run workflow** a mano una vez, y
+      confirmá que no da error (evita que el bucket se pause).
 - [ ] Restablecer la contraseña de un usuario de prueba y confirmar que el
       correo llega (confirma Resend).
 - [ ] Esperar ~20 min sin tocar el sitio y volver a entrar — si no
@@ -176,8 +196,11 @@ variables una por una desde [.env.cloud.example](.env.cloud.example).
   ferretería con tráfico bajo/medio alcanza cómodo; si se llena, el
   siguiente paso es el plan pago de Neon (~$19/mes) o mover a un Postgres
   propio en el VPS de [DEPLOY.md](DEPLOY.md).
-- **R2 free**: 10 GB de imágenes. Un catálogo de varios cientos de
-  productos con fotos optimizadas a WebP entra sin problema.
+- **Supabase Storage free**: 1 GB de imágenes. Para un catálogo chico/mediano
+  con fotos optimizadas a WebP alcanza, pero es bastante menos que R2 (10GB)
+  — si se llena, migrar a Cloudflare R2 es solo cambiar las variables
+  `AWS_*` (mismo protocolo S3-compatible, cero cambios de código), a costo
+  de tener que darle una tarjeta a Cloudflare.
 - **Render free**: 750h/mes (alcanza para 1 servicio 24/7), pero SIN el
   keep-alive el servicio duerme tras 15 min de inactividad — cold start de
   30-60s en la siguiente visita. No hay SLA ni soporte prioritario en free.

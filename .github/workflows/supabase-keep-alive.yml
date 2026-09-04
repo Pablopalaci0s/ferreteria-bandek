@@ -1,0 +1,24 @@
+name: Supabase keep-alive
+
+# El plan free de Supabase pausa el proyecto (y con el, el bucket de
+# Storage donde viven las imagenes del catalogo) tras una semana sin
+# actividad. Este ping evita eso pegandole a un archivo publico del
+# bucket cada 3 dias, bien por debajo del limite de una semana.
+#
+# Configurar antes de que funcione (Settings > Secrets and variables >
+# Actions, en este repo):
+#   SUPABASE_STORAGE_URL -> https://<PROJECT_REF>.supabase.co/storage/v1/object/public/bandek-imagenes
+#   (el mismo valor que AWS_URL en Render; subi ademas un archivo vacio
+#   llamado "keepalive.txt" al bucket, ver DEPLOY-CLOUD.md paso 2.7)
+
+on:
+  schedule:
+    - cron: '0 6 */3 * *'
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping keepalive.txt
+        run: curl -sS -f "${{ secrets.SUPABASE_STORAGE_URL }}/keepalive.txt"
