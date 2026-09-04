@@ -51,12 +51,21 @@ nuevas, todo sigue usando disco local y MySQL como hasta ahora.
 1. Creá cuenta en [neon.com](https://neon.com) (sin tarjeta).
 2. **New Project** → nombre `bandek`, región la más cercana a tus
    clientes (ej. AWS us-east-1).
-3. En el dashboard del proyecto, pestaña **Connect** → elegí la connection
-   string con **pooled connection** (usa PgBouncer, mejor para una app web) →
-   copiala completa. Se ve así:
+3. En el dashboard del proyecto, pestaña **Connect** → apagá el toggle
+   **"Connection pooling"** (dejala en la conexión **directa**, sin
+   `-pooler` en el host) → copiá la connection string completa. Se ve así:
    ```
-   postgresql://usuario:password@ep-xxxx-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require
+   postgresql://usuario:password@ep-xxxx.us-east-1.aws.neon.tech/neondb?sslmode=require
    ```
+
+   ⚠️ **No uses la conexión "pooled"** (la que tiene `-pooler` en el host,
+   con el toggle activado) **para esta app**. La probamos a fondo y el
+   pooler de Neon (PgBouncer en modo *transaction pooling*) falla de forma
+   intermitente con las migraciones de Laravel — a veces corre bien, a
+   veces tira `SQLSTATE[25P02]: current transaction is aborted` a mitad de
+   una migración. Es un límite conocido de ese modo de pooling con DDL de
+   varios pasos, no un bug de la app. Con el tráfico bajo que va a tener
+   el sitio, la conexión directa no tiene ninguna desventaja real.
 4. Guardala — es tu `DB_URL`. Si querés, renombrá la base de `neondb` a
    `bandek_db` desde el dashboard (opcional, cosmético).
 
