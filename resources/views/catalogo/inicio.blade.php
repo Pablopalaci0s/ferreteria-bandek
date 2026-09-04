@@ -592,7 +592,7 @@
                     </a>
                 </div>
 
-                <div class="bg-red-50 rounded-2xl p-6 sm:p-8">
+                <div class="bandek-checklist rounded-2xl p-6 sm:p-8">
                     <ul class="space-y-4 sm:space-y-5">
                         @foreach ([
                             'Cotización a medida',
@@ -606,7 +606,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                                     </svg>
                                 </span>
-                                <span class="text-gray-900 font-medium">{{ $item }}</span>
+                                <span class="bandek-checklist-text font-medium">{{ $item }}</span>
                             </li>
                         @endforeach
                     </ul>
@@ -618,6 +618,18 @@
 
         </div>
     </section>
+
+    <style>
+        /* Definido a mano (no con bg-red-50/text-gray-900 de Tailwind) para
+           que el fondo y el texto cambien juntos en modo oscuro — si el
+           fondo se queda claro pero el texto se pone casi blanco (que es lo
+           que pasa si se mezclan utilidades de Tailwind con las reglas
+           globales de body.oscuro), el texto queda ilegible. */
+        .bandek-checklist { background: #fef2f2; }
+        .bandek-checklist-text { color: #111827; }
+        body.oscuro .bandek-checklist { background: rgba(153, 27, 27, 0.18); }
+        body.oscuro .bandek-checklist-text { color: #f8fafc; }
+    </style>
 
     {{-- =========================================================
          CTA WHATSAPP
