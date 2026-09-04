@@ -46,7 +46,7 @@
         /* =========================================================
            TIPOGRAFÍA DE MARCA
         ========================================================= */
-        h1, h2, .bandek-cat-label, .bandek-ventaja-title {
+        h1, h2, .bandek-cat-label {
             font-family: 'Oswald', sans-serif;
             letter-spacing: 0.01em;
         }
