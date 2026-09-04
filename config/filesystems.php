@@ -45,24 +45,31 @@ return [
         // S3-compatible (Cloudflare R2, Supabase Storage, etc.) con
         // FILESYSTEM_DISK_PUBLIC=s3 + las variables AWS_* de abajo. Ver
         // DEPLOY-CLOUD.md.
-        'public' => [
+        //
+        // OJO: las claves de cada driver van en bloques separados a
+        // propósito. "root" es solo del driver "local" — el adaptador S3
+        // de Flysystem también lee "root" (la usa como prefijo de ruta
+        // dentro del bucket), así que si quedara presente con el driver
+        // "s3" cada archivo se guardaría con la ruta absoluta del
+        // contenedor pegada adelante (ej. "app/storage/app/public/...")
+        // en vez de solo "categorias/archivo.webp".
+        'public' => array_merge([
             'driver' => env('FILESYSTEM_DISK_PUBLIC', 'local'),
-            // Driver "local" (dev / servidor con disco persistente).
-            'root' => storage_path('app/public'),
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
-            // Driver "s3" y compatibles (Cloudflare R2, Supabase Storage...).
+        ], env('FILESYSTEM_DISK_PUBLIC', 'local') === 's3' ? [
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
-            // URL pública base. Local: la del symlink /storage. S3/R2: la
-            // URL pública del bucket (AWS_URL), obligatoria en ese caso.
-            'url' => env('AWS_URL') ?: rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
-        ],
+            'url' => env('AWS_URL'),
+        ] : [
+            'root' => storage_path('app/public'),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+        ]),
 
         's3' => [
             'driver' => 's3',
