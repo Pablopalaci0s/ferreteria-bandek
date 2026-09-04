@@ -19,8 +19,12 @@ services:
         value: production
       - key: APP_DEBUG
         value: "false"
+      # generateValue: true NO sirve acá — Render genera un secreto
+      # generico, pero Laravel necesita el formato "base64:" + 32 bytes
+      # que solo produce `php artisan key:generate --show`. Pegá ese
+      # resultado a mano.
       - key: APP_KEY
-        generateValue: true
+        sync: false
       - key: APP_URL
         sync: false
       - key: APP_LOCALE

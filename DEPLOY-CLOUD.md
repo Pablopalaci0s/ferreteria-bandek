@@ -114,7 +114,16 @@ creaste la cuenta de Resend) y cambiarlo después.
 3. Te va a pedir valor para cada variable marcada `sync: false` en
    render.yaml. Completalas con lo juntado en los pasos 1-3 (usá
    [.env.cloud.example](.env.cloud.example) como referencia de qué va en
-   cada una). `APP_KEY` y `CRON_SECRET` se generan solos.
+   cada una). `CRON_SECRET` se genera solo.
+
+   `APP_KEY` la tenés que generar vos con Laravel (no sirve un valor
+   random cualquiera, tiene que tener el formato exacto que usa Laravel
+   para cifrar):
+   ```bash
+   php artisan tinker --execute="echo 'base64:'.base64_encode(random_bytes(32));"
+   ```
+   Pegá el resultado completo (con el prefijo `base64:`) en el campo
+   `APP_KEY`.
 4. **Create New Resources** → Render clona el repo, construye la imagen
    Docker (usa [Dockerfile](Dockerfile)) y la despliega. La primera build
    tarda varios minutos.
