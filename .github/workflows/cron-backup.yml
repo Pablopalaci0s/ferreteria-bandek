@@ -1,0 +1,25 @@
+name: Backup diario
+
+# Render free tier no tiene cron real, así que este workflow hace de cron
+# externo: le pega a /cron/backup una vez al día, que corre `php artisan
+# db:backup` (ver app/Http/Controllers/CronController.php).
+#
+# Configurar antes de que funcione (Settings > Secrets and variables >
+# Actions, en este repo):
+#   APP_URL      -> https://tu-app.onrender.com (sin barra al final)
+#   CRON_SECRET  -> el mismo valor que CRON_SECRET en Render
+
+on:
+  schedule:
+    # 09:00 UTC = 03:00 en El Salvador (UTC-6, sin horario de verano).
+    - cron: '0 9 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar el backup
+        run: |
+          curl -sS -f -X GET "${{ secrets.APP_URL }}/cron/backup" \
+            -H "X-Cron-Secret: ${{ secrets.CRON_SECRET }}"

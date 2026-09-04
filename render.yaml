@@ -1,0 +1,98 @@
+# Blueprint de Render (https://render.com/docs/blueprint-spec). Con esto en
+# el repo, "New > Blueprint" en el dashboard de Render arma el servicio
+# solo — las variables con `sync: false` te las pide a mano una vez.
+# Ver DEPLOY-CLOUD.md para el paso a paso completo (Neon, R2, Resend, etc.)
+
+services:
+  - name: bandek
+    type: web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /up
+
+    envVars:
+      - key: APP_NAME
+        value: "Ferretería BANDEK"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        sync: false
+      - key: APP_LOCALE
+        value: es
+      - key: APP_FALLBACK_LOCALE
+        value: es
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_STACK
+        value: stderr
+      - key: LOG_LEVEL
+        value: error
+
+      # Base de datos: Neon (Postgres). Pegar la connection string completa.
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_URL
+        sync: false
+      - key: DB_SSLMODE
+        value: require
+
+      # Backups (ver BACKUPS.md) + disparador externo (ver DEPLOY-CLOUD.md).
+      - key: DB_BACKUP_RETENTION_DAYS
+        value: "14"
+      - key: DB_BACKUP_UPLOAD_DISK
+        value: google
+      - key: DB_BACKUP_UPLOAD_FOLDER
+        value: bandek-backups
+      - key: GOOGLE_DRIVE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_DRIVE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_DRIVE_REFRESH_TOKEN
+        sync: false
+      - key: GOOGLE_DRIVE_FOLDER_ID
+        sync: false
+      - key: CRON_SECRET
+        generateValue: true
+
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+
+      # Imágenes: Cloudflare R2 (S3-compatible).
+      - key: FILESYSTEM_DISK_PUBLIC
+        value: s3
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_DEFAULT_REGION
+        value: auto
+      - key: AWS_BUCKET
+        sync: false
+      - key: AWS_ENDPOINT
+        sync: false
+      - key: AWS_URL
+        sync: false
+      - key: AWS_USE_PATH_STYLE_ENDPOINT
+        value: "true"
+
+      # Correo: Resend.
+      - key: MAIL_MAILER
+        value: resend
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_FROM_ADDRESS
+        sync: false
+      - key: MAIL_FROM_NAME
+        value: "Ferretería BANDEK"
