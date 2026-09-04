@@ -68,26 +68,10 @@ class CatalogoController extends Controller
         }
 
         // Búsqueda normal
-        if ($request->filled('buscar')) {
+        $buscar = $request->string('buscar')->toString();
 
-            $buscar = $request->string('buscar')->toString();
-
-            $query->where(function ($q) use ($buscar) {
-
-                $q->where('nombre', 'like', "%{$buscar}%")
-                    ->orWhere('sku', 'like', "%{$buscar}%")
-                    ->orWhere('modelo', 'like', "%{$buscar}%")
-                    ->orWhere('descripcion', 'like', "%{$buscar}%")
-                    ->orWhere('descripcion_larga', 'like', "%{$buscar}%")
-
-                    ->orWhereHas('marca', function ($marca) use ($buscar) {
-                        $marca->where('nombre', 'like', "%{$buscar}%");
-                    })
-
-                    ->orWhereHas('categoria', function ($categoria) use ($buscar) {
-                        $categoria->where('nombre', 'like', "%{$buscar}%");
-                    });
-            });
+        if ($buscar !== '') {
+            $query->buscar($buscar);
         }
 
         // Solo disponibles
@@ -104,13 +88,17 @@ class CatalogoController extends Controller
             ->paginate(12)
             ->withQueryString();
 
+        $sugerencia = $buscar !== '' && $productos->total() === 0
+            ? Producto::sugerirCorreccion($buscar)
+            : null;
+
         $categorias = Categoria::where('activo', true)->get();
 
         $marcas = Marca::where('activo', true)->get();
 
         return view(
             'catalogo.index',
-            compact('productos', 'categorias', 'marcas')
+            compact('productos', 'categorias', 'marcas', 'sugerencia')
         );
     }
 
@@ -123,23 +111,7 @@ class CatalogoController extends Controller
 
         // Búsqueda
         if ($buscar !== '') {
-
-            $query->where(function ($q) use ($buscar) {
-
-                $q->where('nombre', 'like', "%{$buscar}%")
-                    ->orWhere('sku', 'like', "%{$buscar}%")
-                    ->orWhere('modelo', 'like', "%{$buscar}%")
-                    ->orWhere('descripcion', 'like', "%{$buscar}%")
-                    ->orWhere('descripcion_larga', 'like', "%{$buscar}%")
-
-                    ->orWhereHas('marca', function ($marca) use ($buscar) {
-                        $marca->where('nombre', 'like', "%{$buscar}%");
-                    })
-
-                    ->orWhereHas('categoria', function ($categoria) use ($buscar) {
-                        $categoria->where('nombre', 'like', "%{$buscar}%");
-                    });
-            });
+            $query->buscar($buscar);
         }
 
         // Filtro por categoría
@@ -176,7 +148,12 @@ class CatalogoController extends Controller
             ->take(12)
             ->get();
 
+        $sugerencia = $buscar !== '' && $productos->isEmpty()
+            ? Producto::sugerirCorreccion($buscar)
+            : null;
+
         return response()->json([
+            'sugerencia' => $sugerencia,
             'productos' => $productos->map(function ($producto) {
 
                 return [

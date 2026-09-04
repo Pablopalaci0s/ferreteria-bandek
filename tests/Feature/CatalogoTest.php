@@ -138,4 +138,43 @@ class CatalogoTest extends TestCase
             ->assertOk()
             ->assertSee('Producto Estrella');
     }
+
+    public function test_buscar_no_distingue_mayusculas_de_minusculas(): void
+    {
+        // Postgres SI distingue mayusculas en LIKE (a diferencia de MySQL);
+        // sin el LOWER() explicito en el scope, este producto en mayusculas
+        // no aparecia al buscar en minuscula.
+        Producto::factory()->create(['nombre' => 'SPRAY SILVER GREY 125']);
+
+        $respuesta = $this->getJson(route('catalogo.buscar', ['q' => 'spray']));
+
+        $nombres = collect($respuesta->json('productos'))->pluck('nombre');
+        $this->assertContains('SPRAY SILVER GREY 125', $nombres);
+    }
+
+    public function test_index_pagina_correctamente_al_filtrar_por_categoria(): void
+    {
+        $pintura = Categoria::factory()->create(['slug' => 'pintura']);
+
+        Producto::factory()->count(15)->create(['categoria_id' => $pintura->id]);
+
+        $respuesta = $this->get(route('catalogo.index', ['categoria' => 'pintura']));
+
+        $respuesta->assertOk();
+        // Antes esto pasaba por el buscador "en vivo" (limitado a 12, sin
+        // paginacion): con 15 productos en la categoria, la pagina 1 debe
+        // mostrar 12 y quedar un link a la pagina 2.
+        $respuesta->assertSee('page=2', false);
+    }
+
+    public function test_buscar_sugiere_correccion_si_no_hay_resultados(): void
+    {
+        Producto::factory()->create(['nombre' => 'Martillo de Goma']);
+
+        $respuesta = $this->getJson(route('catalogo.buscar', ['q' => 'martilo']));
+
+        $respuesta->assertOk();
+        $this->assertSame([], $respuesta->json('productos'));
+        $this->assertSame('martillo', $respuesta->json('sugerencia'));
+    }
 }

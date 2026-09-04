@@ -436,7 +436,19 @@ x-for="producto in productos"
                                 No se encontraron productos.
                             </p>
 
-                            <p class="text-xs text-gray-400 mt-1">
+                            <template x-if="sugerencia">
+                                <p class="text-sm text-gray-600 mt-1">
+                                    ¿Quisiste decir
+                                    <button
+                                        type="button"
+                                        @click="buscar = sugerencia; buscarProductos()"
+                                        class="text-red-800 font-semibold hover:underline"
+                                        x-text="sugerencia"
+                                    ></button>?
+                                </p>
+                            </template>
+
+                            <p class="text-xs text-gray-400 mt-1" x-show="!sugerencia">
                                 Intenta con otro nombre, marca o modelo.
                             </p>
 
@@ -1241,6 +1253,7 @@ BUSCADOR PRINCIPAL
 
             buscar: '',
             productos: [],
+            sugerencia: null,
             cargando: false,
             abierto: false,
 
@@ -1255,6 +1268,7 @@ BUSCADOR PRINCIPAL
                 if (texto.length === 0) {
 
                     this.productos = [];
+                    this.sugerencia = null;
                     this.cargando = false;
 
                     return;
@@ -1299,6 +1313,7 @@ BUSCADOR PRINCIPAL
 
 
                     this.productos = data.productos || [];
+                    this.sugerencia = data.sugerencia || null;
 
 
                 } catch (error) {
@@ -1309,6 +1324,7 @@ BUSCADOR PRINCIPAL
                     );
 
                     this.productos = [];
+                    this.sugerencia = null;
 
 
                 } finally {
