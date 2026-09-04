@@ -294,62 +294,52 @@
     @endif
 
     {{-- =========================================================
-         VENTAJAS
+         VENTAJAS (franja compacta, no una seccion mas)
     ========================================================= --}}
 
-    <section class="max-w-7xl mx-auto px-4 pt-12 sm:pt-16">
+    <section class="max-w-7xl mx-auto px-4 pt-8 sm:pt-10">
 
-        <p class="flex items-center gap-2 text-red-800 font-bold text-xs uppercase tracking-widest mb-2">
-            <span class="inline-block w-5 h-[3px] bg-red-800 -skew-x-12"></span>
-            Por qué elegirnos
-        </p>
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
-            Ventajas de comprar en BANDEK
-        </h2>
+        <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft px-5 sm:px-8 py-5 sm:py-6">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-y-5 gap-x-4">
 
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-800" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z" />
+                        </svg>
+                    </span>
+                    <p class="text-sm font-semibold text-gray-900 leading-tight">Pedís por WhatsApp</p>
+                </div>
 
-            <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft p-4 sm:p-5 flex flex-col items-center text-center gap-2">
-                <span class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-800" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z" />
-                    </svg>
-                </span>
-                <p class="font-semibold text-gray-900 text-sm">Pedís por WhatsApp</p>
-                <p class="text-xs text-gray-500 leading-relaxed">Sin registrarte ni bajar apps: nos escribís y coordinamos todo ahí.</p>
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                            <circle cx="12" cy="11" r="2.5" />
+                        </svg>
+                    </span>
+                    <p class="text-sm font-semibold text-gray-900 leading-tight">Retiro o envío</p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.775-3.775a6 6 0 01-7.936 7.936l-6.545 6.545a2.121 2.121 0 01-3-3l6.546-6.546a6 6 0 017.936-7.937l-3.767 3.768z" />
+                        </svg>
+                    </span>
+                    <p class="text-sm font-semibold text-gray-900 leading-tight">Te asesoramos</p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                    <p class="text-sm font-semibold text-gray-900 leading-tight">Lun-sáb, 8am-5pm</p>
+                </div>
+
             </div>
-
-            <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft p-4 sm:p-5 flex flex-col items-center text-center gap-2">
-                <span class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
-                        <circle cx="12" cy="11" r="2.5" />
-                    </svg>
-                </span>
-                <p class="font-semibold text-gray-900 text-sm">Retiro o envío</p>
-                <p class="text-xs text-gray-500 leading-relaxed">Pasás a la tienda en San Salvador o lo coordinamos a domicilio.</p>
-            </div>
-
-            <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft p-4 sm:p-5 flex flex-col items-center text-center gap-2">
-                <span class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.775-3.775a6 6 0 01-7.936 7.936l-6.545 6.545a2.121 2.121 0 01-3-3l6.546-6.546a6 6 0 017.936-7.937l-3.767 3.768z" />
-                    </svg>
-                </span>
-                <p class="font-semibold text-gray-900 text-sm">Te asesoramos</p>
-                <p class="text-xs text-gray-500 leading-relaxed">Contanos tu proyecto y te decimos qué materiales necesitás.</p>
-            </div>
-
-            <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft p-4 sm:p-5 flex flex-col items-center text-center gap-2">
-                <span class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </span>
-                <p class="font-semibold text-gray-900 text-sm">Horario amplio</p>
-                <p class="text-xs text-gray-500 leading-relaxed">Lunes a sábado, de 8:00 a.m. a 5:00 p.m.</p>
-            </div>
-
         </div>
 
     </section>
@@ -602,45 +592,25 @@
                     </a>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3 sm:gap-4">
-
-                    <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft p-4 sm:p-5">
-                        <span class="w-11 h-11 rounded-full bg-red-50 flex items-center justify-center mb-2.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m-6 4h6m-6 4h4M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
-                            </svg>
-                        </span>
-                        <p class="text-gray-900 text-sm font-semibold leading-snug">Cotización a medida</p>
-                    </div>
-
-                    <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft p-4 sm:p-5">
-                        <span class="w-11 h-11 rounded-full bg-red-50 flex items-center justify-center mb-2.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h11v8H3zM14 10h4l3 3v2h-7z" />
-                                <circle cx="6.5" cy="18.5" r="1.5" />
-                                <circle cx="17.5" cy="18.5" r="1.5" />
-                            </svg>
-                        </span>
-                        <p class="text-gray-900 text-sm font-semibold leading-snug">Entrega coordinada</p>
-                    </div>
-
-                    <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft p-4 sm:p-5">
-                        <span class="w-11 h-11 rounded-full bg-red-50 flex items-center justify-center mb-2.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.775-3.775a6 6 0 01-7.936 7.936l-6.545 6.545a2.121 2.121 0 01-3-3l6.546-6.546a6 6 0 017.936-7.937l-3.767 3.768z" />
-                            </svg>
-                        </span>
-                        <p class="text-gray-900 text-sm font-semibold leading-snug">Asesoría técnica</p>
-                    </div>
-
-                    <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft p-4 sm:p-5">
-                        <span class="w-11 h-11 rounded-full bg-red-50 flex items-center justify-center mb-2.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </span>
-                        <p class="text-gray-900 text-sm font-semibold leading-snug">Precios por volumen</p>
-                    </div>
+                <div class="bg-red-50 rounded-2xl p-6 sm:p-8">
+                    <ul class="space-y-4 sm:space-y-5">
+                        @foreach ([
+                            'Cotización a medida',
+                            'Entrega coordinada',
+                            'Asesoría técnica',
+                            'Precios por volumen',
+                        ] as $item)
+                            <li class="flex items-center gap-3">
+                                <span class="w-6 h-6 rounded-full bg-red-800 flex items-center justify-center shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                </span>
+                                <span class="text-gray-900 font-medium">{{ $item }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
 
                 </div>
 
