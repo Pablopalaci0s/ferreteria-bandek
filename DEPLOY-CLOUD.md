@@ -100,7 +100,7 @@ creaste la cuenta de Resend) y cambiarlo después.
 
 1. Subí los commits de este cambio a GitHub (`git push`).
 2. En [render.com](https://render.com) → **New → Blueprint** → conectá el
-   repo `Pablopalaci0s/ferreterai`. Render lee [render.yaml](render.yaml)
+   repo `Pablopalaci0s/ferreteria-bandek`. Render lee [render.yaml](render.yaml)
    solo y arma el servicio.
 3. Te va a pedir valor para cada variable marcada `sync: false` en
    render.yaml. Completalas con lo juntado en los pasos 1-3 (usá

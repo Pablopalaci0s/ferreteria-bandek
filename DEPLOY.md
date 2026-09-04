@@ -58,7 +58,7 @@ EXIT;
 ```bash
 sudo mkdir -p /var/www/bandek
 sudo chown $USER:$USER /var/www/bandek
-git clone https://github.com/Pablopalaci0s/ferreterai.git /var/www/bandek
+git clone https://github.com/Pablopalaci0s/ferreteria-bandek.git /var/www/bandek
 cd /var/www/bandek
 
 composer install --no-dev --optimize-autoloader
