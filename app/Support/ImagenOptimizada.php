@@ -137,31 +137,27 @@ class ImagenOptimizada
         $nombreArchivo = Str::random(40).'.'.$extension;
         $rutaRelativa = $carpeta.'/'.$nombreArchivo;
 
-        Storage::disk('public')->makeDirectory($carpeta);
-
-        self::renderizar(
+        self::renderizarYGuardar(
             $origen,
             $anchoOriginal,
             $altoOriginal,
             $anchoMaximo,
             $altoMaximo,
             $calidad,
-            Storage::disk('public')->path($rutaRelativa),
+            $rutaRelativa,
             $extension
         );
 
         // Thumbnail opcional.
         if ($thumbnail !== null) {
-            Storage::disk('public')->makeDirectory($carpeta.'/thumbs');
-
-            self::renderizar(
+            self::renderizarYGuardar(
                 $origen,
                 $anchoOriginal,
                 $altoOriginal,
                 $thumbnail,
                 $thumbnail,
                 $calidad,
-                Storage::disk('public')->path(self::rutaThumb($rutaRelativa)),
+                self::rutaThumb($rutaRelativa),
                 $extension
             );
         }
@@ -172,8 +168,37 @@ class ImagenOptimizada
     }
 
     /**
+     * Redimensiona y escribe el resultado en el disco "public" bajo
+     * $rutaRelativa. Renderiza a un archivo temporal local primero (GD
+     * necesita una ruta de archivo real) y de ahí lo sube al disco, para
+     * que funcione igual con el disco local que con uno en la nube tipo
+     * S3/R2 (que no tiene una ruta de archivo real).
+     */
+    private static function renderizarYGuardar(
+        $origen,
+        int $anchoOriginal,
+        int $altoOriginal,
+        int $anchoMaximo,
+        int $altoMaximo,
+        int $calidad,
+        string $rutaRelativa,
+        string $extension
+    ): void {
+        $temporal = tempnam(sys_get_temp_dir(), 'bandek_img_');
+
+        try {
+            self::renderizar($origen, $anchoOriginal, $altoOriginal, $anchoMaximo, $altoMaximo, $calidad, $temporal, $extension);
+
+            Storage::disk('public')->put($rutaRelativa, file_get_contents($temporal));
+        } finally {
+            @unlink($temporal);
+        }
+    }
+
+    /**
      * Redimensiona (solo achica) para entrar en anchoMax x altoMax
-     * conservando la proporción, y escribe el archivo en disco.
+     * conservando la proporción, y escribe el archivo en $rutaCompleta
+     * (una ruta de archivo real en disco, no una ruta del disco "public").
      */
     private static function renderizar(
         $origen,

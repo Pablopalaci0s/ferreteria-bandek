@@ -30,7 +30,7 @@
                     <tr class="hover:bg-gray-50">
                         <td class="p-3">
                             @if ($categoria->imagen)
-                                <img src="{{ asset('storage/' . $categoria->imagen) }}" class="w-10 h-10 object-cover rounded border">
+                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($categoria->imagen) }}" class="w-10 h-10 object-cover rounded border">
                             @else
                                 <span class="text-xs text-gray-300">—</span>
                             @endif

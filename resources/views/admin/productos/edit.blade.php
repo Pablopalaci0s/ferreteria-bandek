@@ -80,7 +80,7 @@
                     <div class="relative group">
 
                         <img
-                            src="{{ asset('storage/' . $imagen->ruta) }}"
+                            src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($imagen->ruta) }}"
                             class="w-full h-24 object-cover rounded-md border"
                             alt="Imagen del producto"
                         >

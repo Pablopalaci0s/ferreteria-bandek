@@ -34,7 +34,7 @@
                                     class="bandek-banner-slide"
                                 >
                                     @if ($banner->link)<a href="{{ $banner->link }}" class="block w-full h-full">@endif
-                                        <img src="{{ asset('storage/' . $banner->imagen) }}" alt="{{ $banner->titulo ?? 'Banner' }}" class="w-full h-full object-contain">
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($banner->imagen) }}" alt="{{ $banner->titulo ?? 'Banner' }}" class="w-full h-full object-contain">
                                         @if ($banner->titulo)
                                             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex items-end pointer-events-none">
                                                 <p class="text-white text-base sm:text-xl font-bold px-4 sm:px-6 pb-3 sm:pb-4 max-w-lg leading-tight">{{ $banner->titulo }}</p>
@@ -79,7 +79,7 @@
                                         class="bandek-banner-slide"
                                     >
                                         @if ($banner->link)<a href="{{ $banner->link }}" class="block w-full h-full">@endif
-                                            <img src="{{ asset('storage/' . $banner->imagen) }}" alt="{{ $banner->titulo ?? 'Banner' }}" class="w-full h-full object-contain">
+                                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($banner->imagen) }}" alt="{{ $banner->titulo ?? 'Banner' }}" class="w-full h-full object-contain">
                                             @if ($banner->titulo)
                                                 <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent flex items-end pointer-events-none">
                                                     <p class="text-white text-sm sm:text-base font-bold px-4 pb-3 leading-tight">{{ $banner->titulo }}</p>
@@ -163,7 +163,7 @@
 
                                     <span class="bandek-cat-circle">
                                         @if ($categoria->imagen)
-                                            <img src="{{ asset('storage/' . $categoria->imagen) }}" alt="{{ $categoria->nombre }}">
+                                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($categoria->imagen) }}" alt="{{ $categoria->nombre }}">
                                         @else
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.775-3.775a6 6 0 01-7.936 7.936l-6.545 6.545a2.121 2.121 0 01-3-3l6.546-6.546a6 6 0 017.936-7.937l-3.767 3.768z" />
@@ -277,7 +277,7 @@
                         class="relative block w-[calc(50%-0.5rem)] sm:w-[calc(33.333%-0.667rem)] lg:w-[calc(25%-0.75rem)] aspect-[5/4] rounded-lg overflow-hidden bg-gray-100 group"
                     >
                         <img
-                            src="{{ asset('storage/' . $banner->imagen) }}"
+                            src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($banner->imagen) }}"
                             alt="{{ $banner->titulo ?? 'Promoción' }}"
                             class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
                         >
@@ -617,7 +617,7 @@
                             class="bandek-banner-slide"
                         >
                             @if ($banner->link)<a href="{{ $banner->link }}" class="block w-full h-full">@endif
-                                <img src="{{ asset('storage/' . $banner->imagen) }}" alt="{{ $banner->titulo ?? 'Banner' }}" class="w-full h-full object-contain">
+                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($banner->imagen) }}" alt="{{ $banner->titulo ?? 'Banner' }}" class="w-full h-full object-contain">
                             @if ($banner->link)</a>@endif
                         </div>
                     @endforeach

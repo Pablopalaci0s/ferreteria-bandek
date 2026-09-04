@@ -34,7 +34,7 @@
     @enderror
 
     @if ($c && $c->imagen)
-        <img src="{{ asset('storage/' . $c->imagen) }}" class="w-16 h-16 object-cover mt-2 rounded border">
+        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($c->imagen) }}" class="w-16 h-16 object-cover mt-2 rounded border">
         <p class="text-xs text-gray-400 mt-1">Imagen actual. Subí una nueva solo si querés reemplazarla.</p>
     @endif
 </div>

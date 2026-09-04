@@ -1,6 +1,6 @@
 @php
 $imagenPrincipal = $producto->imagen_principal
-? asset('storage/' . $producto->imagen_principal)
+? \Illuminate\Support\Facades\Storage::disk('public')->url($producto->imagen_principal)
 : asset('img/logo-completo.png');
 
 $ogDescripcion = $producto->descripcion
@@ -8,7 +8,7 @@ $ogDescripcion = $producto->descripcion
 : 'Consultá precio y disponibilidad de ' . $producto->nombre . ' en Ferretería BANDEK.';
 
 $galeriaImagenes = collect([$imagenPrincipal])
-    ->merge($producto->imagenes->map(fn ($img) => asset('storage/' . $img->ruta)))
+    ->merge($producto->imagenes->map(fn ($img) => \Illuminate\Support\Facades\Storage::disk('public')->url($img->ruta)))
     ->values();
 
 $waNumero = \App\Models\Configuracion::where('clave', 'whatsapp_numero')->value('valor');

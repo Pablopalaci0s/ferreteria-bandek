@@ -48,7 +48,7 @@
                 @forelse ($banners as $banner)
                     <tr class="hover:bg-gray-50">
                         <td class="p-3">
-                            <img src="{{ asset('storage/' . $banner->imagen) }}" class="w-24 h-12 object-cover rounded border">
+                            <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($banner->imagen) }}" class="w-24 h-12 object-cover rounded border">
                         </td>
                         <td class="p-3 font-medium text-gray-800">{{ $banner->titulo ?: '—' }}</td>
                         <td class="p-3 text-gray-500">{{ $banner->orden }}</td>

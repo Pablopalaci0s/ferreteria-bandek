@@ -21,7 +21,7 @@
     <a href="{{ route('catalogo.show', $producto) }}" class="block bg-gray-50 aspect-square overflow-hidden">
         <img
             src="{{ $producto->imagen_principal
-                ? asset('storage/' . $producto->imagen_thumb)
+                ? \Illuminate\Support\Facades\Storage::disk('public')->url($producto->imagen_thumb)
                 : asset('img/logo-completo.png') }}"
             alt="{{ $producto->nombre }}"
             loading="lazy"
@@ -71,7 +71,7 @@
                         id: {{ $producto->id }},
                         nombre: @js($producto->nombre),
                         precio: {{ (float) $producto->precio_final }},
-                        imagen: @js($producto->imagen_principal ? asset('storage/' . $producto->imagen_thumb) : asset('img/logo-completo.png')),
+                        imagen: @js($producto->imagen_principal ? \Illuminate\Support\Facades\Storage::disk('public')->url($producto->imagen_thumb) : asset('img/logo-completo.png')),
                         url: @js(route('catalogo.show', $producto)),
                     })"
                     class="shrink-0 w-10 flex items-center justify-center border border-gray-300 hover:border-red-800 hover:text-red-800 text-gray-600 rounded-md transition duration-200 ease-emil active:scale-90"

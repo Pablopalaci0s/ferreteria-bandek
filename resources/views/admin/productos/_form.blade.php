@@ -313,7 +313,7 @@ $p = $producto ?? null;
 
 @if ($p && $p->imagen_principal)
     <img
-        src="{{ asset('storage/' . $p->imagen_principal) }}"
+        src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($p->imagen_principal) }}"
         class="w-20 h-20 object-cover mt-2 rounded border"
     >
 @endif

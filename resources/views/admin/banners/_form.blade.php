@@ -97,7 +97,7 @@ $zonaActual = old('zona', $b->zona ?? $zonaSeleccionada ?? array_key_first(\App\
 
 @if ($b && $b->imagen)
     <img
-        src="{{ asset('storage/' . $b->imagen) }}"
+        src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($b->imagen) }}"
         class="w-full max-w-md h-32 object-cover mt-2 rounded border"
     >
     <p class="text-xs text-gray-400 mt-1">

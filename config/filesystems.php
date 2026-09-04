@@ -38,13 +38,30 @@ return [
             'report' => false,
         ],
 
+        // "public" es el disco donde se guardan las imágenes de productos,
+        // categorías y banners (ver App\Support\ImagenOptimizada). Por
+        // defecto es el disco local, pero en un hosting sin disco
+        // persistente (ej. Render free tier) hay que apuntarlo a un bucket
+        // S3-compatible (Cloudflare R2, Supabase Storage, etc.) con
+        // FILESYSTEM_DISK_PUBLIC=s3 + las variables AWS_* de abajo. Ver
+        // DEPLOY-CLOUD.md.
         'public' => [
-            'driver' => 'local',
+            'driver' => env('FILESYSTEM_DISK_PUBLIC', 'local'),
+            // Driver "local" (dev / servidor con disco persistente).
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
+            // Driver "s3" y compatibles (Cloudflare R2, Supabase Storage...).
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => env('AWS_DEFAULT_REGION'),
+            'bucket' => env('AWS_BUCKET'),
+            'endpoint' => env('AWS_ENDPOINT'),
+            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            // URL pública base. Local: la del symlink /storage. S3/R2: la
+            // URL pública del bucket (AWS_URL), obligatoria en ese caso.
+            'url' => env('AWS_URL') ?: rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
         ],
 
         's3' => [

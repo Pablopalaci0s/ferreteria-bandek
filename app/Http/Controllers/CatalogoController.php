@@ -7,6 +7,7 @@ use App\Models\Categoria;
 use App\Models\Marca;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CatalogoController extends Controller
 {
@@ -199,10 +200,7 @@ class CatalogoController extends Controller
                     'stock' => $producto->stock,
 
                     'imagen' => $producto->imagen_principal
-                        ? asset(
-                            'storage/'.
-                            $producto->imagen_thumb
-                        )
+                        ? Storage::disk('public')->url($producto->imagen_thumb)
                         : asset('img/logo-completo.png'),
 
                     'categoria' => $producto->categoria?->nombre,
