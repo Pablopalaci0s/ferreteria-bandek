@@ -648,7 +648,7 @@
 
         <div class="grid md:grid-cols-2 gap-4 sm:gap-6 items-stretch">
 
-            <div class="rounded-2xl overflow-hidden shadow-soft border border-gray-100 h-64 md:h-auto">
+            <div class="rounded-2xl overflow-hidden shadow-soft border border-gray-100 h-64 md:h-96">
                 <iframe
                     src="https://www.google.com/maps?q=13.7071833,-89.2269977&z=16&output=embed"
                     class="w-full h-full"
