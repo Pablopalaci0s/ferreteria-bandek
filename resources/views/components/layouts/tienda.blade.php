@@ -1220,39 +1220,69 @@ CARRITO (panel lateral)
 </div>
 
 {{-- =========================================================
-BOTÓN FLOTANTE WHATSAPP
+BOTONES FLOTANTES (WhatsApp + Facebook)
 ========================================================= --}}
 
-<a
-href="https://wa.me/{{ $whatsappNumero }}"
-target="_blank"
-rel="noopener noreferrer"
-class="fixed bottom-5 right-5 z-40
-bg-green-500 hover:bg-green-600
-text-white rounded-full
-w-12 h-12 sm:w-14 sm:h-14
-flex items-center justify-center
-shadow-soft-md hover:shadow-soft-lg hover:-translate-y-0.5
-transition duration-300 ease-emil active:scale-90"
-aria-label="Contactar por WhatsApp"
+<div class="fixed bottom-5 right-5 z-40 flex flex-col items-center gap-3">
 
->
+    <a
+    href="https://www.facebook.com/profile.php?id=100091257395112"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="bg-[#1877F2] hover:bg-[#1461c9]
+    text-white rounded-full
+    w-12 h-12 sm:w-14 sm:h-14
+    flex items-center justify-center
+    shadow-soft-md hover:shadow-soft-lg hover:-translate-y-0.5
+    transition duration-300 ease-emil active:scale-90"
+    aria-label="Seguinos en Facebook"
+    >
 
-<svg
-    xmlns="http://www.w3.org/2000/svg"
-    class="w-5 h-5 sm:w-6 sm:h-6"
-    fill="currentColor"
-    viewBox="0 0 24 24"
->
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 sm:w-6 sm:h-6"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+    >
 
-    <path
-        d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z"
-    />
+        <path
+            d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.89h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z"
+        />
 
-</svg>
+    </svg>
 
+    </a>
 
-</a>
+    <a
+    href="https://wa.me/{{ $whatsappNumero }}"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="bg-green-500 hover:bg-green-600
+    text-white rounded-full
+    w-12 h-12 sm:w-14 sm:h-14
+    flex items-center justify-center
+    shadow-soft-md hover:shadow-soft-lg hover:-translate-y-0.5
+    transition duration-300 ease-emil active:scale-90"
+    aria-label="Contactar por WhatsApp"
+
+    >
+
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 sm:w-6 sm:h-6"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+    >
+
+        <path
+            d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 004.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2z"
+        />
+
+    </svg>
+
+    </a>
+
+</div>
 
 {{-- =========================================================
 ALPINE.JS
