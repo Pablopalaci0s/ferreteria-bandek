@@ -5,6 +5,7 @@
 
     @php
         $waNumero = \App\Models\Configuracion::where('clave', 'whatsapp_numero')->value('valor');
+        $direccionSitio = \App\Models\Configuracion::where('clave', 'direccion')->value('valor');
     @endphp
 
     <h1 class="sr-only">Ferretería BANDEK — Herramientas, materiales de construcción y soluciones eléctricas</h1>
@@ -630,6 +631,66 @@
         body.oscuro .bandek-checklist { background: rgba(153, 27, 27, 0.18); }
         body.oscuro .bandek-checklist-text { color: #f8fafc; }
     </style>
+
+    {{-- =========================================================
+         DÓNDE ESTAMOS UBICADOS
+    ========================================================= --}}
+
+    <section class="max-w-7xl mx-auto px-4 pt-12 sm:pt-16">
+
+        <p class="flex items-center gap-2 text-red-800 font-bold text-xs uppercase tracking-widest mb-2">
+            <span class="inline-block w-5 h-[3px] bg-red-800 -skew-x-12"></span>
+            Visitanos
+        </p>
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
+            Dónde estamos ubicados
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-4 sm:gap-6 items-stretch">
+
+            <div class="rounded-2xl overflow-hidden shadow-soft border border-gray-100 h-64 md:h-auto">
+                <iframe
+                    src="https://www.google.com/maps?q=13.7071833,-89.2269977&z=16&output=embed"
+                    class="w-full h-full"
+                    style="border:0"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Ubicación de Ferretería BANDEK en el mapa"
+                ></iframe>
+            </div>
+
+            <div class="bandek-card bg-white border border-gray-100 rounded-2xl shadow-soft p-6 flex flex-col justify-center gap-5">
+
+                <div class="flex items-start gap-3">
+                    <span class="w-11 h-11 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                        </svg>
+                    </span>
+                    <div>
+                        <p class="font-semibold text-gray-900">{{ $direccionSitio ?: 'San Salvador, El Salvador' }}</p>
+                        <p class="text-sm text-gray-500 mt-1">Lunes a sábado, 8:00 a.m. – 5:00 p.m. · Domingo cerrado</p>
+                    </div>
+                </div>
+
+                <a
+                    href="https://maps.app.goo.gl/zSyejAe9n3wmPHbc7"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="bandek-btn-cta inline-flex items-center justify-center gap-2 bg-red-800 hover:bg-red-900 text-white font-semibold px-6 py-3 rounded-md"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                    </svg>
+                    Cómo llegar
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
 
     {{-- =========================================================
          CTA WHATSAPP
