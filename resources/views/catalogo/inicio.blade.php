@@ -636,7 +636,7 @@
          DÓNDE ESTAMOS UBICADOS
     ========================================================= --}}
 
-    <section class="max-w-7xl mx-auto px-4 pt-12 sm:pt-16">
+    <section class="max-w-7xl mx-auto px-4 py-12 sm:py-16">
 
         <p class="flex items-center gap-2 text-red-800 font-bold text-xs uppercase tracking-widest mb-2">
             <span class="inline-block w-5 h-[3px] bg-red-800 -skew-x-12"></span>

@@ -563,12 +563,13 @@ x-for="producto in productos"
 
             <span
                 class="hidden lg:flex items-center gap-1.5
-                       text-sm text-gray-600"
+                       text-sm text-gray-600 max-w-[220px] min-w-0"
+                title="{{ $direccionSitio }}"
             >
 
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-4 h-4"
+                    class="w-4 h-4 shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -589,7 +590,7 @@ x-for="producto in productos"
 
                 </svg>
 
-                San Salvador
+                <span class="truncate">{{ $direccionSitio }}</span>
 
             </span>
 
