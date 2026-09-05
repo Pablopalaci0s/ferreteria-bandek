@@ -561,10 +561,13 @@ x-for="producto in productos"
                  UBICACIÓN
             ================================================== --}}
 
-            <span
-                class="hidden lg:flex items-center gap-1.5
-                       text-sm text-gray-600 max-w-[220px] min-w-0"
-                title="{{ $direccionSitio }}"
+            <a
+                href="https://maps.app.goo.gl/zSyejAe9n3wmPHbc7"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hidden lg:flex relative group items-center gap-1.5
+                       text-sm text-gray-600 hover:text-red-800 transition
+                       max-w-[220px] min-w-0"
             >
 
                 <svg
@@ -592,7 +595,17 @@ x-for="producto in productos"
 
                 <span class="truncate">{{ $direccionSitio }}</span>
 
-            </span>
+                {{-- Tooltip: la dirección completa, sin recortar --}}
+                <span
+                    class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-max max-w-xs
+                           -translate-x-1/2 rounded-md bg-gray-900 px-3 py-1.5 text-xs text-white
+                           opacity-0 shadow-lg transition duration-150 group-hover:opacity-100"
+                >
+                    {{ $direccionSitio }}
+                    <span class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-gray-900"></span>
+                </span>
+
+            </a>
 
 
         </div>
