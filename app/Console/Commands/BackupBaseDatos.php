@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\ConfigurationUrlParser;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 use Throwable;
@@ -16,7 +17,17 @@ class BackupBaseDatos extends Command
     public function handle(): int
     {
         $conexion = config('database.default');
-        $db = config("database.connections.{$conexion}");
+
+        // config('database.connections.*') trae los valores CRUDOS (host,
+        // port, etc. con sus defaults de 127.0.0.1/3306/5432): si la
+        // conexion se arma con una DB_URL (Neon, Supabase...), esos valores
+        // nunca se completan solos - Laravel recien los resuelve adentro de
+        // la conexion real. Sin pasarlo por ConfigurationUrlParser, el
+        // backup terminaba conectandose a localhost en vez de a la base
+        // real.
+        $db = (new ConfigurationUrlParser)->parseConfiguration(
+            config("database.connections.{$conexion}")
+        );
         $driver = $db['driver'] ?? null;
 
         if (! in_array($driver, ['mysql', 'pgsql'], true)) {

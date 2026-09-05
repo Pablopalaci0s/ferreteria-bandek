@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\ConfigurationUrlParser;
 use Symfony\Component\Process\Process;
 
 class RestaurarBaseDatos extends Command
@@ -14,7 +15,14 @@ class RestaurarBaseDatos extends Command
     public function handle(): int
     {
         $conexion = config('database.default');
-        $db = config("database.connections.{$conexion}");
+
+        // Ver el comentario equivalente en BackupBaseDatos::handle(): sin
+        // esto, con una conexion armada via DB_URL (Neon, Supabase...) los
+        // valores de host/puerto quedan en sus defaults (127.0.0.1) en vez
+        // de los reales.
+        $db = (new ConfigurationUrlParser)->parseConfiguration(
+            config("database.connections.{$conexion}")
+        );
         $driver = $db['driver'] ?? null;
 
         if (! in_array($driver, ['mysql', 'pgsql'], true)) {
